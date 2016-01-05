@@ -1,0 +1,3 @@
+[submodule "ADBLib"]
+	path = ADBLib
+	url = git@github.com:Dreadbot/ADBLib.git
