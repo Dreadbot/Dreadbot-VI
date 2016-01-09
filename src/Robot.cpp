@@ -1,9 +1,9 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
 //using ADBLib::Controller;
+using ADBLib::Logger;
 using ADBLib::Drivebase;
 using ADBLib::TractionDrive;
-using Hydra::Logger; //TODO: Fix hydra namespace (???)
 
 class Robot: public IterativeRobot
 {
@@ -16,7 +16,7 @@ private:
 
 	void RobotInit()
 	{
-		Logger::newLog("sysLog", "sysLog"); //TODO: check if newLog() appends file extension. if so, fix.
+		Logger::newLog("sysLog", "/sysLog.txt");
 
 		jys = new Joystick(0);
 		gamepad.setJoystick(jys);
@@ -26,7 +26,7 @@ private:
 		}
 		catch (const std::exception &ex)
 		{
-			Logger::log(ex.what(), "sysLog", Hydra::error);
+			Logger::log(ex.what(), "sysLog", ADBLib::error);
 		}
 
 		for (int i = 0; i < 4; i++)
