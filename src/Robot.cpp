@@ -20,14 +20,7 @@ private:
 
 		jys = new Joystick(0);
 		gamepad.setJoystick(jys);
-		try
-		{
-			gamepad.parseConfig("/ControlConfig.xml");
-		}
-		catch (const std::exception &ex)
-		{
-			Logger::log(ex.what(), "sysLog", ADBLib::error);
-		}
+		gamepad.parseConfig("/ControlConfig.xml");
 
 		for (int i = 0; i < 4; i++)
 		{
