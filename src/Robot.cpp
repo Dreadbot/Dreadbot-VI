@@ -1,6 +1,5 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
-//using ADBLib::Controller;
 using ADBLib::Logger;
 using ADBLib::Drivebase;
 using ADBLib::TractionDrive;
@@ -8,9 +7,10 @@ using ADBLib::TractionDrive;
 class Robot: public IterativeRobot
 {
 private:
+	LiveWindow* lw;
 	Joystick* jys;
-	ADBLib::Controller gamepad; //Pleases eclipse for some reason
-
+	ADBLib::MPU6050* mpu;
+	BuiltInAccelerometer* bia;
 	Drivebase* drivebase;
 	CANTalon* motors[4];
 
@@ -18,24 +18,20 @@ private:
 	{
 		Logger::newLog("sysLog", "/sysLog.txt");
 
+		lw = LiveWindow::GetInstance();
 		jys = new Joystick(0);
-		gamepad.setJoystick(jys);
-		gamepad.parseConfig("/ControlConfig.xml");
-
+		bia = new BuiltInAccelerometer;
 		for (int i = 0; i < 4; i++)
 		{
-			motors[i] = new CANTalon(i+1, 3); //Everything below this in this loop is ripped from last year's mecanum drive code
-			motors[i]->SetControlMode(CANSpeedController::ControlMode::kSpeed);
-			motors[i]->SetPosition(0.0);
-			motors[i]->SelectProfileSlot(0);
-			//motors[i]->SetFeedbackDevice(CANTalon::QuadEncoder);
-			motors[i]->SetPID(0.5, 0, 0, 0);
-			motors[i]->SetVoltageRampRate(0.5); //Ramp up for drive motors
+			motors[i] = new CANTalon(i + 1);
+			motors[i]->SetControlMode(CANTalon::kPercentVbus);
 		}
-		drivebase = new TractionDrive(motors[0],
-				motors[1],
-				motors[3],
-				motors[2]);
+
+		drivebase = new TractionDrive(motors[0], motors[1], motors[2], motors[3]);
+		motors[3]->SetInverted(true);
+		motors[1]->SetInverted(true);
+
+
 
 		Logger::log("Successfully initialized Robot", "sysLog");
 	}
@@ -57,6 +53,15 @@ private:
 
 	void TeleopPeriodic()
 	{
+		double aX = 0, aY = 0, aZ = 0;
+		aX = bia->GetX();
+		aY = bia->GetY();
+		aZ = bia->GetZ();
+		SmartDashboard::PutNumber("aX", aX);
+		SmartDashboard::PutNumber("aY", aY);
+		SmartDashboard::PutNumber("aZ", aZ);
+
+		drivebase->drive(jys->GetRawAxis(2), jys->GetRawAxis(1), jys->GetRawAxis(0));
 
 	}
 
