@@ -7,9 +7,8 @@ using ADBLib::TractionDrive;
 class Robot: public IterativeRobot
 {
 private:
-	LiveWindow* lw;
 	Joystick* jys;
-	ADBLib::MPU6050* mpu;
+	Compressor* compressor;
 	BuiltInAccelerometer* bia;
 	Drivebase* drivebase;
 	CANTalon* motors[4];
@@ -17,8 +16,7 @@ private:
 	void RobotInit()
 	{
 		Logger::newLog("sysLog", "/sysLog.txt");
-
-		lw = LiveWindow::GetInstance();
+		compressor = new Compressor(0);
 		jys = new Joystick(0);
 		bia = new BuiltInAccelerometer;
 		for (int i = 0; i < 4; i++)
@@ -38,7 +36,7 @@ private:
 
 	void AutonomousInit()
 	{
-
+		compressor->Start();
 	}
 
 	void AutonomousPeriodic()
@@ -46,9 +44,14 @@ private:
 
 	}
 
+	void TestInit()
+	{
+		compressor->Start();
+	}
+
 	void TeleopInit()
 	{
-
+		compressor->Start();
 	}
 
 	void TeleopPeriodic()
@@ -65,9 +68,9 @@ private:
 
 	}
 
-	void TestPeriodic()
+	void DisabledInit()
 	{
-
+		compressor->Stop();
 	}
 };
 
