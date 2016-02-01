@@ -2,7 +2,7 @@
 #include "../ADBLib/src/ADBLib.h"
 #include "../lib/navx_frc_cpp/include/AHRS.h"
 using ADBLib::TractionDrive;
-using ADBLib::Vector3D;
+using ADBLib::MultiVision;
 
 #define RADCONV (3.141592653 / 180.0)
 #define MAX_ROT 336.0
@@ -17,6 +17,7 @@ private:
 	Preferences* prefs;
 	double start_rots[3];
 	Timer timer;
+	MultiVision* vision;
 
 	double last;
 
@@ -35,6 +36,9 @@ private:
 		drivebase = new TractionDrive(motors[4], motors[2], motors[3], motors[1]);
 		prefs = Preferences::GetInstance();
 		last = 0;
+
+		vision = new MultiVision;
+		vision->switchCamera("cam0");
 	}
 
 	void AutonomousInit()
@@ -61,6 +65,7 @@ private:
 		drivebase->drive(jys->GetRawAxis(0), -jys->GetRawAxis(1), setpoint);
 		last = error;
 		output_stats();
+		vision->postImage();
 	}
 
 	void DisabledInit()
