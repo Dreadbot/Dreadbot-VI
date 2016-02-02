@@ -1,2 +1,2 @@
 # Dreadbot-VI
-Code for the 2016 Dreadbot.
+Test code on a repository for Dreadbot programmers in training.
