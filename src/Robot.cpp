@@ -1,30 +1,32 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
 #include "../lib/navx_frc_cpp/include/AHRS.h"
-using ADBLib::TractionDrive;
-using ADBLib::MultiVision;
-
-#define RADCONV (3.141592653 / 180.0)
-#define MAX_ROT 336.0
+using namespace ADBLib;
 
 class Robot: public IterativeRobot
 {
 private:
-	AHRS* ahrs;
 	TractionDrive* drivebase;
 	CANTalon* motors[5];
 	Joystick* jys;
+	ADBLib::Controller gpd;
+	Compressor* compressor;
 	Preferences* prefs;
-	double start_rots[3];
-	Timer timer;
-	MultiVision* vision;
 
-	double last;
+	SimplePneumatic* shooterPiston;
+	SimplePneumatic* liftArm;
+	SimplePneumatic* extendArm;
+	SimplePneumatic* tail;
+	SimplePneumatic* intakeArms;
+	CANTalon* fan;
 
 	void RobotInit()
 	{
-		ahrs = new AHRS(SPI::Port::kMXP);
+		prefs = Preferences::GetInstance();
+		compressor = new Compressor(1);
 		jys = new Joystick(0);
+		gpd.setJoystick(jys);
+		gpd.parseConfig("/ControlConfig.xml");
 		for (int i = 1; i < 5; i++)
 		{
 			motors[i] = new CANTalon(i);
@@ -34,42 +36,53 @@ private:
 		motors[2]->SetInverted(true);
 		motors[1]->SetInverted(true);
 		drivebase = new TractionDrive(motors[4], motors[2], motors[3], motors[1]);
-		prefs = Preferences::GetInstance();
-		last = 0;
 
-		vision = new MultiVision;
-		vision->switchCamera("cam0");
+		liftArm = new SimplePneumatic(new DoubleSolenoid(1, 0, 1));
+		shooterPiston = new SimplePneumatic(new Solenoid(1, 2));
+		extendArm = new SimplePneumatic(new DoubleSolenoid(1, 3, 4));
+		// bfdtail = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
+		intakeArms = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
+		fan = new CANTalon(5);
+
 	}
 
 	void AutonomousInit()
 	{
-		ahrs->ZeroYaw();
+		compressor->Start();
 	}
 
 	void AutonomousPeriodic()
 	{
-		drivebase->drive(0, -0.6, -(ahrs->GetYaw() / 18.0)); //y and x axis flipped?
-		output_stats();
+		if (prefs->GetBoolean("fan-on", true))
+			fan->Set(1);
+		else
+			fan->Set(0);
+		//drivebase->drive(0, -0.6, -(ahrs->GetYaw() / 18.0)); //y and x axis flipped?
 	}
 
 	void TeleopInit()
 	{
+		compressor->Start();
 	}
 
 	void TeleopPeriodic()
 	{
-		const double ctrlVal = jys->GetRawAxis(4);
-		double error = ctrlVal - (ahrs->GetRawGyroZ() / MAX_ROT);
-		double setpoint = ctrlVal;// + error + (prefs->GetDouble("P", 1) * (error - last));
+		shooterPiston->set(gpd["shooter"]);
+		liftArm->set(gpd["liftArm"]);
+		extendArm->set(gpd["extendArm"] != 0 ? 1 : -1);
+		intakeArms->set(gpd["intakeArms"] != 0 ? 1 : -1);
 
-		drivebase->drive(jys->GetRawAxis(0), -jys->GetRawAxis(1), setpoint);
-		last = error;
-		output_stats();
-		vision->postImage();
+		drivebase->drive(0, -gpd["transY"], gpd["rot"]);
+
+		if (prefs->GetBoolean("fan-on", true))
+			fan->Set(1);
+		else
+			fan->Set(0);
 	}
 
 	void DisabledInit()
 	{
+		fan->Set(0);
 	}
 
 	void TestInit()
@@ -78,11 +91,6 @@ private:
 	}
 
 	void TestPeriodic()
-	{
-
-	}
-
-	void output_stats()
 	{
 
 	}
