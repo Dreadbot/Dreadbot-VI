@@ -1,6 +1,7 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
 #include "../lib/navx_frc_cpp/include/AHRS.h"
+#include "auton/AutoBot.h"
 using namespace ADBLib;
 
 class Robot: public IterativeRobot
@@ -19,6 +20,8 @@ private:
 	SimplePneumatic* tail;
 	SimplePneumatic* intakeArms;
 	CANTalon* fan;
+
+	AutoBot* autobot;
 
 	void RobotInit()
 	{
@@ -44,10 +47,13 @@ private:
 		intakeArms = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
 		fan = new CANTalon(5);
 
+		autobot = new AutoBot;
+		autobot->init(drivebase, shooterPiston, liftArm, extendArm);
 	}
 
 	void AutonomousInit()
 	{
+		autobot->switchMode(AutoBot::NOP);
 		compressor->Start();
 	}
 
@@ -57,6 +63,8 @@ private:
 			fan->Set(1);
 		else
 			fan->Set(0);
+
+		autobot->update();
 		//drivebase->drive(0, -0.6, -(ahrs->GetYaw() / 18.0)); //y and x axis flipped?
 	}
 
