@@ -5,6 +5,7 @@ Drivebase* RoboState::drivebase = nullptr;
 SimplePneumatic* RoboState::shooterPiston = nullptr;
 SimplePneumatic* RoboState::arm = nullptr;
 SimplePneumatic* RoboState::extendArm = nullptr;
+AHRS* RoboState::ahrs = nullptr;
 Log* RoboState::autoLog = nullptr;
 
 void RoboState::shoot()
@@ -44,4 +45,18 @@ void RoboState::drive(double transY, double rot)
 {
 	if (drivebase != nullptr)
 		drivebase->drive(0, transY, rot); //tX, tY, r
+}
+
+double RoboState::getYaw()
+{
+	if (ahrs != nullptr)
+		return ahrs->GetYaw();
+	return 0;
+}
+
+double RoboState::getYawRate()
+{
+	if (ahrs != nullptr)
+		return ahrs->GetRawGyroY();
+	return 0;
 }

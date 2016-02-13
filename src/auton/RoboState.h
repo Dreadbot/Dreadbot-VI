@@ -2,19 +2,24 @@
 
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
+#include "../../lib/navx_frc_cpp/include/AHRS.h"
 using ADBLib::FSMState;
 using ADBLib::SimplePneumatic;
 using ADBLib::Drivebase;
 using ADBLib::Logger;
 using ADBLib::Log;
 
+#define DRIVE_KP 0.007
+#define DRIVE_KI 0.0
+#define DRIVE_KD 0.003
+
 class RoboState : public FSMState
 {
 public:
-	enum retcode {NO_UPDATE = 1, ESTOP};
+	enum retcode {NO_UPDATE = 1, ESTOP, TIMER_EXPIRED};
 
-	virtual int update() = 0; //Functions inherited from FSMState
-	virtual void enter() = 0;
+	virtual void enter() = 0; //Functions inherited from FSMState
+	virtual int update() = 0;
 	virtual void  exit() = 0;
 
 protected:
@@ -24,6 +29,8 @@ protected:
 	static void armOut();
 	static void armIn();
 	static void drive(double transY, double rot);
+	static double getYaw();
+	static double getYawRate();
 	static Log* autoLog;
 
 private:
@@ -31,6 +38,7 @@ private:
 	static SimplePneumatic* shooterPiston;
 	static SimplePneumatic* arm;
 	static SimplePneumatic* extendArm;
+	static AHRS* ahrs;
 
 	friend class AutoBot;
 };

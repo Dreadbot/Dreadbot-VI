@@ -3,7 +3,7 @@
 class Stopped : public RoboState
 {
 public:
-	int update();
 	void enter();
+	int update();
 	void exit();
 };

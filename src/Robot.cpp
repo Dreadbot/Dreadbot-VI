@@ -13,6 +13,8 @@ private:
 	ADBLib::Controller gpd;
 	Compressor* compressor;
 	Preferences* prefs;
+	AHRS* ahrs;
+	MultiVision mv;
 
 	SimplePneumatic* shooterPiston;
 	SimplePneumatic* liftArm;
@@ -39,6 +41,7 @@ private:
 		motors[2]->SetInverted(true);
 		motors[1]->SetInverted(true);
 		drivebase = new TractionDrive(motors[4], motors[2], motors[3], motors[1]);
+		ahrs = new AHRS(SPI::Port::kMXP);
 
 		liftArm = new SimplePneumatic(new DoubleSolenoid(1, 0, 1));
 		shooterPiston = new SimplePneumatic(new Solenoid(1, 2));
@@ -46,14 +49,15 @@ private:
 		// bfdtail = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
 		intakeArms = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
 		fan = new CANTalon(5);
+		mv.switchCamera("cam0");
 
 		autobot = new AutoBot;
-		autobot->init(drivebase, shooterPiston, liftArm, extendArm);
+		autobot->init(drivebase, shooterPiston, liftArm, extendArm, ahrs);
 	}
 
 	void AutonomousInit()
 	{
-		autobot->switchMode(AutoBot::NOP);
+		autobot->switchMode(AutoBot::DRIVE);
 		compressor->Start();
 	}
 
@@ -65,7 +69,7 @@ private:
 			fan->Set(0);
 
 		autobot->update();
-		//drivebase->drive(0, -0.6, -(ahrs->GetYaw() / 18.0)); //y and x axis flipped?
+		mv.postImage();
 	}
 
 	void TeleopInit()
@@ -80,6 +84,12 @@ private:
 		extendArm->set(gpd["extendArm"] != 0 ? 1 : -1);
 		intakeArms->set(gpd["intakeArms"] != 0 ? 1 : -1);
 		drivebase->drive(0, -gpd["transY"], gpd["rot"]);
+
+		if (jys->GetRawButton(7))
+			mv.switchCamera("cam0");
+		if (jys->GetRawButton(8))
+			mv.switchCamera("cam1");
+		mv.postImage();
 
 		if (prefs->GetBoolean("fan-on", true))
 			fan->Set(1);

@@ -1,6 +1,7 @@
 #include "../../ADBLib/src/ADBLib.h"
 #include "RoboState.h"
 #include "Stopped.h"
+#include "Drive.h"
 using ADBLib::FSMTransition;
 using ADBLib::FiniteStateMachine;
 using ADBLib::Log;
@@ -11,12 +12,12 @@ using ADBLib::SimplePneumatic;
 class AutoBot
 {
 public:
-	enum autonModes {NOP, FULLAUTON};
+	enum autonModes {NOP, DRIVE, FULLAUTON};
 
 	AutoBot();
 	~AutoBot();
 	void init(Drivebase* newDB, SimplePneumatic* newShooterPiston,
-				SimplePneumatic* newArm, SimplePneumatic* newExtendArm);
+				SimplePneumatic* newArm, SimplePneumatic* newExtendArm, AHRS* ahrs);
 	void switchMode(autonModes mode);
 	void update();
 	void reset() {} //@TODO Implement AutoBot::reset()
@@ -28,4 +29,5 @@ private:
 
 	//States
 	Stopped* stopped;
+	Drive* drive;
 };
