@@ -5,7 +5,7 @@ Drivebase* RoboState::drivebase = nullptr;
 SimplePneumatic* RoboState::shooterPiston = nullptr;
 SimplePneumatic* RoboState::arm = nullptr;
 SimplePneumatic* RoboState::extendArm = nullptr;
-Log* RoboState::autoLog = Logger::getLog("sysLog");
+Log* RoboState::autoLog = nullptr;
 
 void RoboState::shoot()
 {

@@ -11,7 +11,7 @@ using ADBLib::Log;
 class RoboState : public FSMState
 {
 public:
-	enum retcode {NO_UPDATE, ESTOP};
+	enum retcode {NO_UPDATE = 1, ESTOP};
 
 	virtual int update() = 0; //Functions inherited from FSMState
 	virtual void enter() = 0;

@@ -3,6 +3,7 @@
 //Initializes states
 AutoBot::AutoBot()
 {
+	log = Logger::getLog("sysLog");
 	stopped = new Stopped;
 }
 
@@ -20,14 +21,12 @@ void AutoBot::init(Drivebase* newDB, SimplePneumatic* newShooterPiston,
 	RoboState::shooterPiston = newShooterPiston;
 	RoboState::arm = newArm;
 	RoboState::extendArm = newExtendArm;
+	RoboState::autoLog = Logger::getLog("sysLog");
 }
 
 //Switches modes, changing the state table in the process.
 void AutoBot::switchMode(autonModes mode)
 {
-	Log* log = Logger::getLog("sysLog");
-
-	FSMTransition transitionTable[10];
 	RoboState* defState = nullptr;
 	int i = 0;
 
@@ -36,14 +35,14 @@ void AutoBot::switchMode(autonModes mode)
 		log->log("Applying state table 'NOP'");
 		defState = stopped;
 		transitionTable[i++] = {stopped, RoboState::NO_UPDATE, stopped};
-		transitionTable[i++] = END_STATE_TABLE; //@TODO Investigate why this is flagged as conversion from 'false' to pointer
+		transitionTable[i++] = END_STATE_TABLE;
 	}
 	else if (mode == FULLAUTON)
 	{
 		log->log("Applying state table 'FULLAUTON'");
 		defState = stopped;
 		transitionTable[i++] = {stopped, RoboState::NO_UPDATE, stopped};
-		transitionTable[i++] = END_STATE_TABLE; //@TODO Investigate why this is flagged as conversion from 'false' to pointer
+		transitionTable[i++] = END_STATE_TABLE;
 	}
 
 	fsm.init(transitionTable, defState);

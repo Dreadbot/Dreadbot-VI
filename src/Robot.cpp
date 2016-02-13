@@ -79,7 +79,6 @@ private:
 		liftArm->set(gpd["liftArm"]);
 		extendArm->set(gpd["extendArm"] != 0 ? 1 : -1);
 		intakeArms->set(gpd["intakeArms"] != 0 ? 1 : -1);
-
 		drivebase->drive(0, -gpd["transY"], gpd["rot"]);
 
 		if (prefs->GetBoolean("fan-on", true))

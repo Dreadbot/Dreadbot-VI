@@ -24,6 +24,7 @@ public:
 private:
 	Log* log;
 	FiniteStateMachine fsm;
+	FSMTransition transitionTable[15];
 
 	//States
 	Stopped* stopped;
