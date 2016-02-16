@@ -6,7 +6,7 @@ AutoBot::AutoBot()
 	log = Logger::getLog("sysLog");
 	stopped = new Stopped;
 	drive = new Drive(0.5, 0.5);
-	rotate = new Rotate(170.0);
+	rotate = new Rotate(90.0);
 }
 
 //Deletes states
@@ -45,7 +45,8 @@ void AutoBot::switchMode(autonModes mode)
 	{
 		log->log("Applying state table 'DRIVE'");
 		defState = rotate;
-		transitionTable[i++] = {rotate, RoboState::TIMER_EXPIRED, stopped};
+		transitionTable[i++] = {rotate, RoboState::TIMER_EXPIRED, drive};
+		transitionTable[i++] = {drive, RoboState::TIMER_EXPIRED, rotate};
 		transitionTable[i++] = END_STATE_TABLE;
 	}
 	else if (mode == FULLAUTON)
