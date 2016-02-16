@@ -4,6 +4,7 @@ Drive::Drive(double newTime, double newSpeed)
 {
 	time = newTime;
 	speed = newSpeed;
+	startRot = 0;
 	driveTimer = new Timer;
 }
 

@@ -2,6 +2,7 @@
 #include "RoboState.h"
 #include "Stopped.h"
 #include "Drive.h"
+#include "Rotate.h"
 using ADBLib::FSMTransition;
 using ADBLib::FiniteStateMachine;
 using ADBLib::Log;
@@ -30,4 +31,5 @@ private:
 	//States
 	Stopped* stopped;
 	Drive* drive;
+	Rotate* rotate;
 };

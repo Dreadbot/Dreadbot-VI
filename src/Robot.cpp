@@ -99,6 +99,7 @@ private:
 
 	void DisabledInit()
 	{
+		Logger::flushLogBuffers();
 		fan->Set(0);
 	}
 
