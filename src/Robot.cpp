@@ -2,6 +2,7 @@
 #include "../ADBLib/src/ADBLib.h"
 #include "../lib/navx_frc_cpp/include/AHRS.h"
 #include "auton/AutoBot.h"
+#include <unistd.h>
 using namespace ADBLib;
 
 class Robot: public IterativeRobot
@@ -53,6 +54,9 @@ private:
 
 		autobot = new AutoBot;
 		autobot->init(drivebase, shooterPiston, liftArm, extendArm, ahrs);
+
+		if (fork() == 0)
+			system("/home/lvuser/grip &");
 	}
 
 	void AutonomousInit()
@@ -68,7 +72,10 @@ private:
 		else
 			fan->Set(0);
 
-		autobot->update();
+		//autobot->update();
+
+
+
 		mv.postImage();
 	}
 
