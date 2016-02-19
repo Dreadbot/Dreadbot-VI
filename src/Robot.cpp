@@ -17,7 +17,7 @@ private:
 	SimplePneumatic* liftArm;
 	SimplePneumatic* extendArm;
 	SimplePneumatic* tail;
-	SimplePneumatic* intakeArms;
+	SimplePneumatic* mandibles;
 	CANTalon* fan;
 
 	void RobotInit()
@@ -38,10 +38,10 @@ private:
 		drivebase = new TractionDrive(motors[4], motors[2], motors[3], motors[1]);
 
 		liftArm = new SimplePneumatic(new DoubleSolenoid(1, 0, 1));
-		shooterPiston = new SimplePneumatic(new Solenoid(1, 2));
-		extendArm = new SimplePneumatic(new DoubleSolenoid(1, 3, 4));
-		// bfdtail = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
-		intakeArms = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
+		shooterPiston = new SimplePneumatic(new Solenoid(1, 3));
+		extendArm = new SimplePneumatic(new Solenoid(1, 2));
+		tail = new SimplePneumatic(new DoubleSolenoid(1, 5));
+		mandibles = new SimplePneumatic(new Solenoid(1, 4));
 		fan = new CANTalon(5);
 
 	}
@@ -70,7 +70,8 @@ private:
 		shooterPiston->set(gpd["shooter"]);
 		liftArm->set(gpd["liftArm"]);
 		extendArm->set(gpd["extendArm"] != 0 ? 1 : -1);
-		intakeArms->set(gpd["intakeArms"] != 0 ? 1 : -1);
+		mandibles->set(gpd["mandibles"] != 0 ? 1 : -1);
+		tail->set(gpd["tail"] != 0 ? 1 : -1);
 
 		drivebase->drive(0, -gpd["transY"], gpd["rot"]);
 
