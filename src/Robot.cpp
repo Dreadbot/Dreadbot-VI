@@ -1,6 +1,5 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
-#include "../lib/navx_frc_cpp/include/AHRS.h"
 using namespace ADBLib;
 
 class Robot: public IterativeRobot
