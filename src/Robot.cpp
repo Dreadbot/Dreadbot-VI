@@ -1,6 +1,5 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
-#include "../lib/navx_frc_cpp/include/AHRS.h"
 using namespace ADBLib;
 
 class Robot: public IterativeRobot
@@ -17,7 +16,7 @@ private:
 	SimplePneumatic* liftArm;
 	SimplePneumatic* extendArm;
 	SimplePneumatic* tail;
-	SimplePneumatic* intakeArms;
+	SimplePneumatic* mandibles;
 	CANTalon* fan;
 
 	void RobotInit()
@@ -37,11 +36,11 @@ private:
 		motors[1]->SetInverted(true);
 		drivebase = new TractionDrive(motors[4], motors[2], motors[3], motors[1]);
 
-		liftArm = new SimplePneumatic(new DoubleSolenoid(1, 0, 1));
-		shooterPiston = new SimplePneumatic(new Solenoid(1, 2));
-		extendArm = new SimplePneumatic(new DoubleSolenoid(1, 3, 4));
-		// bfdtail = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
-		intakeArms = new SimplePneumatic(new DoubleSolenoid(1, 5, 6));
+		liftArm = new SimplePneumatic(new DoubleSolenoid(0, 1));
+		shooterPiston = new SimplePneumatic(new Solenoid(3));
+		extendArm = new SimplePneumatic(new Solenoid(2));
+		tail = new SimplePneumatic(new Solenoid(5));
+		mandibles = new SimplePneumatic(new Solenoid(4));
 		fan = new CANTalon(5);
 
 	}
@@ -68,9 +67,10 @@ private:
 	void TeleopPeriodic()
 	{
 		shooterPiston->set(gpd["shooter"]);
-		liftArm->set(gpd["liftArm"]);
-		extendArm->set(gpd["extendArm"] != 0 ? 1 : -1);
-		intakeArms->set(gpd["intakeArms"] != 0 ? 1 : -1);
+		liftArm->set(-gpd["liftArm"]);
+		extendArm->set(gpd["extendArm"]);
+		mandibles->set(gpd["mandibles"]);
+		tail->set(gpd["tail"]);
 
 		drivebase->drive(0, -gpd["transY"], gpd["rot"]);
 
