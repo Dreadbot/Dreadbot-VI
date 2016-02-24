@@ -62,17 +62,33 @@ private:
 	void TeleopInit()
 	{
 		compressor->Start();
+		jys->SetRumble(Joystick::kLeftRumble, 1024);
 	}
 
 	void TeleopPeriodic()
 	{
-		shooterPiston->set(gpd["shooter"]);
-		liftArm->set(-gpd["liftArm"]);
+		SmartDashboard::PutNumber("extendArm", jys->GetRawButton(5));
 		extendArm->set(gpd["extendArm"]);
 		mandibles->set(gpd["mandibles"]);
+		shooterPiston->set(gpd["shooterEject"]); //Shooter override
 		tail->set(gpd["tail"]);
 
-		drivebase->drive(0, -gpd["transY"], gpd["rot"]);
+		if (gpd["armUp"])
+			liftArm->set(1);
+		else if (gpd["armDown"])
+			liftArm->set(-1);
+		else
+			liftArm->set(0);
+		if (gpd["shooter"])
+		{
+			extendArm->set(1);
+			Wait(0.49);
+			shooterPiston->set(1);
+			Wait(0.3);
+			shooterPiston->set(0);
+		}
+
+		drivebase->drive(0, -gpd["transY"], gpd["rot"] + gpd["rotAlt"]);
 
 		if (prefs->GetBoolean("fan-on", true))
 			fan->Set(1);
