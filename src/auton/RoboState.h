@@ -2,12 +2,7 @@
 
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
-#include "../../lib/navx_frc_cpp/include/AHRS.h"
-using ADBLib::FSMState;
-using ADBLib::SimplePneumatic;
-using ADBLib::Drivebase;
-using ADBLib::Logger;
-using ADBLib::Log;
+using namespace ADBLib;
 
 #define DRIVE_KP 0.007
 #define DRIVE_KI 0.0

@@ -1,6 +1,5 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
-#include "../lib/navx_frc_cpp/include/AHRS.h"
 #include "auton/AutoBot.h"
 #include <unistd.h>
 using namespace ADBLib;
