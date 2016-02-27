@@ -23,7 +23,14 @@ private:
 	CANTalon* fan;
 
 	Timer timer;
-	double first_maneuver_time = 2.5;
+	#define NPOS 5
+	int activeposition = 2 ;
+	double t0[NPOS] = {3.0, 2.5, 2.5, 2.5, 2.5};//get over barrier
+	double x0[NPOS] = {45, 90, 45, -90, -45};//first rotation
+	double t1[NPOS] = {1.2, 1.2, 0.7, 1.2, 1.2};//move to goal
+	double x1[NPOS] = {0, -90, -45, 90, 45};//second rotation
+	double t2[NPOS] = {0.3, 0.2, 0.5, 0.2, 0.2};//drive it home
+
 
 	void RobotInit()
 	{
@@ -31,7 +38,8 @@ private:
 		compressor = new Compressor(1);
 		jys = new Joystick(0);
 		gpd.setJoystick(jys);
-		gpd.parseConfig("/ControlConfig.xml");
+		gpd.parseConfig(
+				"/ControlConfig.xml");
 		for (int i = 1; i < 5; i++)
 		{
 			motors[i] = new CANTalon(i);
@@ -66,22 +74,33 @@ private:
 		//fan->Set(0);
 			//Using Gyroscope and dead reckoning to move from #3 to front of tower
 		timer.Start();
-		while(timer.Get() < first_maneuver_time)
+		while(timer.Get() <=t0[activeposition])
 		{
 			drivebase->drive(0, 0.6, -(ahrs->GetYaw() / 18.0));
 		}
 		timer.Stop();
 		drivebase->drive(0, 0, 0);
 		Wait(0.2);
+		//
 
-		rotate(45, drivebase, ahrs);
+		rotate(x0[activeposition], drivebase, ahrs);
 		drivebase->drive(0, 0.5, 0);
-		Wait(1.0);
-		rotate(-45.0, drivebase, ahrs);
+		Wait(t1[activeposition]);
+
+
+
+		rotate(x1[activeposition], drivebase, ahrs);
 		drivebase->drive(0, 0.5, 0);
-		Wait(0.7);
+		Wait(t2[activeposition]);
+
+
+
 		drivebase->drive(0, 0, 0);
-		Wait(1000000000);
+		Wait(10);
+		//stop
+
+
+
 		/*while(fabs(ahrs->GetYaw() - fdest) > 5);
 		{
 			double diff = ahrs->GetYaw() - fdest;
@@ -139,13 +158,14 @@ void rotate(double degrees, Drivebase* drivebase, AHRS* ahrs)
 	if (fdest > 360.0)
 		fdest -= 360.0;
 
-	while(fabs(ahrs->GetYaw() - fdest) > 5)
+	while(fabs(ahrs->GetYaw() - fdest) > 5)//margin of error = 5
 	{
 		double diff = ahrs->GetYaw() - fdest;
 		if (diff > 180.0)
 			diff = 360.0 - diff;
 		if (diff < -180)
 			diff = 360 + diff;
+		//sets rotation
 
 		SmartDashboard::PutNumber("diff", diff);
 		drivebase->drive(0, 0, -diff / 45.0);
