@@ -23,6 +23,12 @@ void RoboState::armUp()
 		arm->set(1);
 }
 
+void RoboState::armStop()
+{
+	if (arm != nullptr)
+		arm->set(0);
+}
+
 void RoboState::armDown()
 {
 	if (arm != nullptr)

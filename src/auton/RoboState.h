@@ -20,6 +20,7 @@ public:
 protected:
 	static void shoot();
 	static void armUp();
+	static void armStop(); //For RAISING the arm!
 	static void armDown();
 	static void armOut();
 	static void armIn();
