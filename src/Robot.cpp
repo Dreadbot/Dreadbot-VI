@@ -4,6 +4,11 @@
 #include <unistd.h>
 using namespace ADBLib;
 
+#define CAM_FOV 57.0
+#define CAM_XSIZE 1280.0
+#define CAM_YSIZE 720.0
+#define CAM_ANGRESO (CAM_FOV / CAM_XSIZE)
+
 class Robot: public IterativeRobot
 {
 private:
@@ -71,10 +76,20 @@ private:
 		else
 			fan->Set(0);
 
+		auto grip = NetworkTable::GetTable("grip");
+
+		auto areas = grip->GetNumberArray("targetsCam0/area", llvm::ArrayRef<double>());
+		const int size = sizeof(areas) / sizeof(double);
+		double bestTarget = 0;
+		for (int i = 0; i < size; i++)
+			if (areas[i] > areas[bestTarget])
+				bestTarget = i;
+
+		double diff = 640.0 - grip->GetNumberArray("targetsCam0/centerX", llvm::ArrayRef<double>())[bestTarget];
+		diff *= CAM_ANGRESO;
+		drivebase->drive(0, 0.15, diff / 18.0);
+
 		//autobot->update();
-
-
-
 		mv.postImage();
 	}
 
