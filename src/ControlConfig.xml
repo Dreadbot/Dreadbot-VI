@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ControlConfig>
-	<profile name="default" active="true">
+	<profile name="primary" active="true">
 	    <control type="joystick" name="transY" id="1"> <!--LJ-V-->
 	        <maxInput value="1.0"/>
 	        <minInput value="-1.0"/>
 	        <deadzone value="0.05"/>
 	        <equation value="1.75*(x-0.4)^3 + 0.6*x^2 + 0.12"/>
 	    </control>
-		<control type="joystick" name="rotAlt" id="0"> <!--LJ-H-->
-			<maxInput value="1.0"/>
-			<minInput value="-1.0"/>
-			<deadzone value="0.05"/>
-			<equation value="1.75*(x-0.4)^3 + 0.6*x^2 + 0.12"/>
-		</control>
 	    <control type="joystick" name="rot" id="4"> <!--RJ-H-->
 	        <maxInput value="1.0"/>
 	        <minInput value="-1.0"/>
 	        <deadzone value="0.05"/>
 	        <equation value="1.75*(x-0.4)^3 + 0.6*x^2 + 0.12"/>
 	    </control>
-		<control type="button" name="shooterEject" id="2"> <!--BTN-B-->
-			<toggle value="false"/>
-			<cooldown value="0.0"/>
-		</control>
 		<control type="button" name="shooter" id="6"> <!--BMP-R-->
 			<toggle value="false"/>
 			<cooldown value="0.1"/>
@@ -39,11 +29,25 @@
 			<toggle value="false"/>
 			<cooldown value="0"/>
 		</control>
-		<control type="button" name="tail" id="3"> <!--BTN-X-->
+	</profile>
+	<profile name="secondary" active="false">
+		<control type="joystick" name="armElevAlt" id="5"> <!--RJ-V-->
+			<maxInput value="1.0"/>
+	        <minInput value="-1.0"/>
+	        <deadzone value="0.05"/>
+	        <equation value="x"/>
+		</control>
+		<control type="joystick" name="extendArm" id="3"> <!--TGR-R-->
+			<maxInput value="1.0"/>
+	        <minInput value="-1.0"/>
+	        <deadzone value="0.1"/>
+	        <equation value="x"/>
+		</control>
+		<control type="button" name="vacuumOverride" id="6"> <!--BMP-R-->
 			<toggle value="true"/>
 			<cooldown value="0.2"/>
 		</control>
-		<control type="button" name="extendArm" id="10"> <!--START-->
+		<control type="button" name="tail" id="2"> <!--BTN-B-->
 			<toggle value="true"/>
 			<cooldown value="0.2"/>
 		</control>
