@@ -79,9 +79,8 @@ private:
 		auto grip = NetworkTable::GetTable("grip");
 
 		auto areas = grip->GetNumberArray("targetsCam0/area", llvm::ArrayRef<double>());
-		const int size = sizeof(areas) / sizeof(double);
-		double bestTarget = 0;
-		for (int i = 0; i < size; i++)
+		unsigned int bestTarget = 0;
+		for (unsigned int i = 0; i < areas.size(); i++)
 			if (areas[i] > areas[bestTarget])
 				bestTarget = i;
 
