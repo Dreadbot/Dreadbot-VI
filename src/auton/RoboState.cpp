@@ -67,3 +67,42 @@ double RoboState::getYawRate()
 		return ahrs->GetRawGyroY();
 	return 0;
 }
+
+/*
+ * https://github.com/kauailabs/navxmxp/blob/master/roborio/c%2B%2B/navXMXP_CPP_CollisionDetection/src/Robot.cpp
+ * THIS FUNCTION IS BEST USED IF CALLED REGULARLY OVER SHORT TIME INCREMENTS!
+ */
+
+bool RoboState::isColliding()
+{
+	if (ahrs == nullptr)
+		return false;
+
+	static double lXAccel = 0.0, lYAccel = 0.0; //Only initialized once
+	static Timer timer;
+	static bool timerRunning = false;
+	if (!timerRunning) //WPI timers don't have a way of telling you if they're already running
+	{
+		timer.Start();
+		timerRunning = false;
+	}
+
+	if (timer.Get() > COLLISION_TIMEOUT)
+	{
+		timer.Stop();
+		timer.Reset(); //Not sure if all these function calls are needed, but for safety's sake, f**k timers.
+		timer.Start();
+		lXAccel = ahrs->GetWorldLinearAccelX();
+		lYAccel = ahrs->GetWorldLinearAccelY();
+		return false; //Since the timeout has been exceeded, return NO COLLISION.
+	}
+
+	double xAccel = ahrs->GetWorldLinearAccelX(), yAccel = ahrs->GetWorldLinearAccelY();
+	double jerkX = xAccel - lXAccel, jerkY = yAccel - lYAccel;
+	lXAccel = xAccel;
+	lYAccel = yAccel;
+	if (sqrt((jerkX * jerkX) + (jerkY * jerkY)) > COLLISION_THRESHOLD_DELTAG)
+		return true;
+	return false;
+}
+
