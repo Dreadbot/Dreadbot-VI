@@ -15,6 +15,13 @@ Drive::~Drive()
 
 void Drive::enter()
 {
+	if (globalDriveTime != 0.0)
+	{
+		autoLog->log("Drive state OVERRIDING DRIVE TIME of " + to_string(time) + "s with NEW TIME of " + to_string(globalDriveTime) + "s!");
+		time = globalDriveTime;
+		globalDriveTime = 0.0;
+	}
+
 	startRot = getYaw();
 	autoLog->log("Entering state 'Drive' for " + to_string(time) + " seconds and rotation of " + to_string(getYaw()) + " degrees!");
 	driveTimer->Start();

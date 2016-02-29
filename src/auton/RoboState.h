@@ -29,6 +29,8 @@ protected:
 	static double getYawRate();
 	static Log* autoLog;
 
+	static double globalDriveTime; //Used to pass in drive times when needed
+
 private:
 	static Drivebase* drivebase;
 	static SimplePneumatic* shooterPiston;

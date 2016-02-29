@@ -7,6 +7,7 @@ SimplePneumatic* RoboState::arm = nullptr;
 SimplePneumatic* RoboState::extendArm = nullptr;
 AHRS* RoboState::ahrs = nullptr;
 Log* RoboState::autoLog = nullptr;
+double RoboState::globalDriveTime = 0.0;
 
 void RoboState::shoot()
 {
