@@ -113,7 +113,7 @@ private:
 			{
 				shooterPiston->set(1);
 				Wait(0.3);
-				shooterPiston->set(1);
+				shooterPiston->set(0);
 			}
 			fanOn = false;
 		}
@@ -127,7 +127,7 @@ private:
 			liftArm->set(gpd2["armElevAlt"]);
 		}
 		extendArm->set(gpd2["extendArm"]);
-		tail->set(gpd2["tail"]);
+		tail->set(!(bool)gpd2["tail"]);
 
 		//Fan control, uses the *cough* force *cough* fan macro
 		if (!gpd2["fanOverride"])

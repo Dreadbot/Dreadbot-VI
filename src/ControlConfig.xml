@@ -5,13 +5,13 @@
 	        <maxInput value="1.0"/>
 	        <minInput value="-1.0"/>
 	        <deadzone value="0.05"/>
-	        <equation value="1.75*(x-0.4)^3 + 0.6*x^2 + 0.12"/>
+	        <equation value="2*x^3"/>
 	    </control>
-	    <control type="joystick" name="rot" id="4"> <!--RJ-H-->
+	    <control type="joystick" name="rot" id="0"> <!--RJ-H-->
 	        <maxInput value="1.0"/>
 	        <minInput value="-1.0"/>
 	        <deadzone value="0.05"/>
-	        <equation value="1.75*(x-0.4)^3 + 0.6*x^2 + 0.12"/>
+	        <equation value="2*x^3"/>
 	    </control>
 		<control type="button" name="shooter" id="6"> <!--BMP-R-->
 			<toggle value="false"/>
@@ -43,8 +43,8 @@
 	        <deadzone value="0.1"/>
 	        <equation value="x"/>
 		</control>
-		<control type="button" name="vacuumOverride" id="6"> <!--BMP-R-->
-			<toggle value="true"/>
+		<control type="button" name="fanOverride" id="6"> <!--BMP-R-->
+			<toggle value="false"/>
 			<cooldown value="0.2"/>
 		</control>
 		<control type="button" name="tail" id="2"> <!--BTN-B-->
