@@ -21,8 +21,8 @@ private:
 	SimplePneumatic* mandibles;
 	CANTalon* fan;
 
-	uint8_t lastControl; //The last joystick (0 or 1) to use the elevation control
-	uint8_t armPos; //The elevation of the arm (0=low, 1=mid, 2=high)
+	bool armElevAlt; //Stores if the alternate control was used last or not. true = alt, false=regular
+	enum {UP, DOWN} armPos;
 	bool fanOn;
 
 	void RobotInit()
@@ -54,7 +54,7 @@ private:
 		mandibles = new SimplePneumatic(new Solenoid(4));
 		fan = new CANTalon(5);
 
-		lastControl = 0;
+		armElevAlt = true;
 		armPos = 0; //This might result in odd behavior at start
 		fanOn = false;
 	}
@@ -86,23 +86,41 @@ private:
 		if (gpd["mandibles"])
 			fanOn = true;
 
-		//todo: FIGURE OUT WHY PUSHING A JOYSTICK UP MAKES IT GO NEGATIVE
-		if (gpd["armUp"] || gpd2["armElevAlt"] < 0)
+		if (gpd["armUp"] || gpd["armDown"])
 		{
-			liftArm->set(1);
-			armPos = 2;
+			armElevAlt = false;
+			if (gpd["armUp"])
+			{
+				armPos = UP;
+				liftArm->set(1);
+			}
+			else if (gpd["armDown"])
+			{
+				armPos = DOWN;
+				liftArm->set(-1);
+			}
 		}
-		else if (gpd["armDown"] || gpd2["armElevAlt"] > 0)
+		if (gpd2["armElevAlt"] != 0 || armElevAlt)
 		{
-			liftArm->set(-1);
-			armPos = 0;
+			double input = gpd2["armElevAlt"];
+			if (input < 0) //No, these comparisons are NOT flipped. I don't know why though.
+			{
+				armPos = UP;
+				liftArm->set(1);
+			}
+			else if (input > 0)
+			{
+				armPos = DOWN;
+				liftArm->set(-1);
+			}
+			else
+				liftArm->set(0);
+			armElevAlt = true;
 		}
-		else if (gpd["armDown"] == 0 && gpd["armUp"] == 0 && gpd2["armElevAlt"] == 0)
-			liftArm->set(0);
 
 		if (gpd["shooter"])
 		{ //Shooter behavior varies with arm position
-			if (armPos == 1 || armPos == 2)
+			if (armPos == UP)
 			{
 				extendArm->set(1);
 				Wait(0.49);
