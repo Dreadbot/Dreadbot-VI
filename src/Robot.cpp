@@ -85,20 +85,21 @@ private:
 		mandibles->set(gpd["mandibles"]);
 		if (gpd["mandibles"])
 			fanOn = true;
-		if (gpd["armUp"] || gpd["armDown"] || lastControl == 0)
+
+		//todo: FIGURE OUT WHY PUSHING A JOYSTICK UP MAKES IT GO NEGATIVE
+		if (gpd["armUp"] || gpd2["armElevAlt"] < 0)
 		{
-			lastControl = 0;
-			if (gpd["armUp"])
-			{
-				liftArm->set(1);
-				armPos = 2;
-			}
-			else if (gpd["armDown"])
-			{
-				liftArm->set(-1);
-				armPos = 0;
-			}
+			liftArm->set(1);
+			armPos = 2;
 		}
+		else if (gpd["armDown"] || gpd2["armElevAlt"] > 0)
+		{
+			liftArm->set(-1);
+			armPos = 0;
+		}
+		else if (gpd["armDown"] == 0 && gpd["armUp"] == 0 && gpd2["armElevAlt"] == 0)
+			liftArm->set(0);
+
 		if (gpd["shooter"])
 		{ //Shooter behavior varies with arm position
 			if (armPos == 1 || armPos == 2)
@@ -119,15 +120,8 @@ private:
 		}
 		drivebase->drive(0, -gpd["transY"], gpd["rot"]);
 
-		//Secondary driver controls
-		if (gpd2["armElevAlt"] || lastControl == 1)
-		{
-			lastControl = 1;
-			armPos = 1;
-			liftArm->set(gpd2["armElevAlt"]);
-		}
 		extendArm->set(gpd2["extendArm"]);
-		tail->set(!(bool)gpd2["tail"]);
+		tail->set(gpd2["tail"]);
 
 		//Fan control, uses the *cough* force *cough* fan macro
 		if (!gpd2["fanOverride"])

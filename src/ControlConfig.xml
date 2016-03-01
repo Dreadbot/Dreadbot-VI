@@ -4,13 +4,13 @@
 	    <control type="joystick" name="transY" id="1"> <!--LJ-V-->
 	        <maxInput value="1.0"/>
 	        <minInput value="-1.0"/>
-	        <deadzone value="0.05"/>
+	        <deadzone value="0.02"/>
 	        <equation value="2*x^3"/>
 	    </control>
 	    <control type="joystick" name="rot" id="0"> <!--RJ-H-->
 	        <maxInput value="1.0"/>
 	        <minInput value="-1.0"/>
-	        <deadzone value="0.05"/>
+	        <deadzone value="0.02"/>
 	        <equation value="2*x^3"/>
 	    </control>
 		<control type="button" name="shooter" id="6"> <!--BMP-R-->
@@ -34,7 +34,7 @@
 		<control type="joystick" name="armElevAlt" id="5"> <!--RJ-V-->
 			<maxInput value="1.0"/>
 	        <minInput value="-1.0"/>
-	        <deadzone value="0.05"/>
+	        <deadzone value="0.1"/>
 	        <equation value="x"/>
 		</control>
 		<control type="joystick" name="extendArm" id="3"> <!--TGR-R-->
@@ -45,7 +45,7 @@
 		</control>
 		<control type="button" name="fanOverride" id="6"> <!--BMP-R-->
 			<toggle value="false"/>
-			<cooldown value="0.2"/>
+			<cooldown value="0.0"/>
 		</control>
 		<control type="button" name="tail" id="2"> <!--BTN-B-->
 			<toggle value="true"/>
