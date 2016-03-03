@@ -41,7 +41,7 @@ void AutoBot::switchMode(autonModes mode)
 		defState = stopped;
 		transitionTable[i++] = END_STATE_TABLE;
 	}
-	else if (mode == DRIVE)
+	else if (mode == BREACH)
 	{
 		log->log("Applying state table 'DRIVE'");
 		defState = rotate;
@@ -49,7 +49,7 @@ void AutoBot::switchMode(autonModes mode)
 		transitionTable[i++] = {drive, RoboState::TIMER_EXPIRED, rotate};
 		transitionTable[i++] = END_STATE_TABLE;
 	}
-	else if (mode == FULLAUTON)
+	else if (mode == FULL)
 	{
 		log->log("Applying state table 'FULLAUTON'");
 		defState = stopped;

@@ -13,7 +13,7 @@ using ADBLib::SimplePneumatic;
 class AutoBot
 {
 public:
-	enum autonModes {NOP, DRIVE, FULLAUTON};
+	enum autonModes {NOP, BREACH, GUIDED, FULL};
 
 	AutoBot();
 	~AutoBot();

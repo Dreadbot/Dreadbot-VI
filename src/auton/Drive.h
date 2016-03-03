@@ -1,14 +1,14 @@
+#pragma once
 #include "RoboState.h"
-using ADBLib::SimplePID;
 
 class Drive : public RoboState
 {
 public:
 	Drive(double newTime, double newSpeed);
 	~Drive();
-	void enter();
-	int update();
-	void exit();
+	virtual void enter();
+	virtual int update();
+	virtual void exit();
 protected:
 	double time;
 	double speed;

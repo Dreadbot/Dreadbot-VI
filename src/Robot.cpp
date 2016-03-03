@@ -65,7 +65,7 @@ private:
 
 	void AutonomousInit()
 	{
-		autobot->switchMode(AutoBot::DRIVE);
+		autobot->switchMode(AutoBot::BREACH);
 		compressor->Start();
 	}
 
