@@ -45,7 +45,7 @@ int Drive::update()
 
 void Drive::exit()
 {
-	autoLog->log("Leaving drive state...");
+	autoLog->log("Leaving state 'Drive'!");
 	driveTimer->Stop();
 	driveTimer->Reset();
 }

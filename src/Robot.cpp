@@ -4,11 +4,6 @@
 #include <unistd.h>
 using namespace ADBLib;
 
-#define CAM_FOV 57.0
-#define CAM_XSIZE 1280.0
-#define CAM_YSIZE 720.0
-#define CAM_ANGRESO (CAM_FOV / CAM_XSIZE)
-
 class Robot: public IterativeRobot
 {
 private:

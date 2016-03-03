@@ -4,11 +4,20 @@
 #include "../ADBLib/src/ADBLib.h"
 using namespace ADBLib;
 
+//PID constants, just in case. Do **NOT** touch kI, it is hideously bugged!
 #define DRIVE_KP 0.007
 #define DRIVE_KI 0.0
 #define DRIVE_KD 0.003
-#define COLLISION_THRESHOLD_DELTAG 0.5 //Taken from NavX library, see note for isColliding()
-#define COLLISION_TIMEOUT 0.06 //60ms timeout to ensure valid collision detection. May be too generous.
+
+//NavX MXP collision constants
+#define COLLISION_THRESHOLD_DELTAG 0.5 	//Taken from NavX library demo code, see note for isColliding()
+#define COLLISION_TIMEOUT 0.06 			//60ms timeout to ensure valid collision detection. May be too generous.
+
+//Vision -- LifeCam 3000 USB camera values
+#define CAM_FOV 57.0		//Manually measured
+#define CAM_XSIZE 1280.0	//Obtained from image data
+#define CAM_YSIZE 720.0		//Obtained from image data
+#define CAM_ANGRESO (CAM_FOV / CAM_XSIZE)	//Calculated constant
 
 class RoboState : public FSMState
 {
