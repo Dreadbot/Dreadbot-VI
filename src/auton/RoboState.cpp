@@ -14,7 +14,7 @@ void RoboState::shoot()
 	if (shooterPiston == nullptr)
 		return;
 	shooterPiston->set(1); //Out
-	Wait(0.5);
+	Wait(0.3);
 	shooterPiston->set(0); //Automatically retracts
 }
 
