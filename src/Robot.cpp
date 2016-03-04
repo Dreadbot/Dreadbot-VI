@@ -66,25 +66,8 @@ private:
 
 	void AutonomousPeriodic()
 	{
-		if (prefs->GetBoolean("fan-on", true))
-			fan->Set(1);
-		else
-			fan->Set(0);
-
-		auto grip = NetworkTable::GetTable("grip");
-
-		auto areas = grip->GetNumberArray("targetsCam0/area", llvm::ArrayRef<double>());
-		unsigned int bestTarget = 0;
-		for (unsigned int i = 0; i < areas.size(); i++)
-			if (areas[i] > areas[bestTarget])
-				bestTarget = i;
-
-		double diff = 640.0 - grip->GetNumberArray("targetsCam0/centerX", llvm::ArrayRef<double>())[bestTarget];
-		diff *= CAM_ANGRESO;
-		drivebase->drive(0, 0.15, diff / 18.0);
-
-		//autobot->update();
-		mv.postImage();
+		fan->Set(1);
+		autobot->update();
 	}
 
 	void TeleopInit()

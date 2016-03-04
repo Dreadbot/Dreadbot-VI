@@ -1,9 +1,10 @@
 #include "../../ADBLib/src/ADBLib.h"
 #include "RoboState.h"
-#include "Stopped.h"
-//#include "GuidedDrive.h"
 #include "Drive.h"
+#include "GuidedDrive.h"
 #include "Rotate.h"
+#include "Shoot.h"
+#include "Stopped.h"
 using ADBLib::FSMTransition;
 using ADBLib::FiniteStateMachine;
 using ADBLib::Log;
@@ -30,7 +31,9 @@ private:
 	FSMTransition transitionTable[15];
 
 	//States
-	Stopped* stopped;
-	Drive* drive;
+	Drive* drive_breach;
+	GuidedDrive* guidedDrive;
 	Rotate* rotate;
+	Stopped* stopped;
+	Shoot* shoot;
 };

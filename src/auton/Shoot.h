@@ -1,7 +1,7 @@
 #include "RoboState.h"
 
 //"Dumb" state -- implements the shooter macro
-class Shoot : RoboState
+class Shoot : public RoboState
 {
 public:
 	void enter();
