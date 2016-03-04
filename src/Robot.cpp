@@ -16,7 +16,6 @@ private:
 	Compressor* compressor;
 	Preferences* prefs;
 	AHRS* ahrs;
-	MultiVision mv;
 
 	SimplePneumatic* shooterPiston;
 	SimplePneumatic* liftArm;

@@ -2,7 +2,9 @@
 
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
+#include <stack>
 using namespace ADBLib;
+using std::stack;
 
 //PID constants, just in case. Do **NOT** touch kI, it is hideously bugged!
 #define DRIVE_KP 0.007
@@ -41,7 +43,9 @@ protected:
 	static bool isColliding();
 	static Log* autoLog;
 
-	static double globalDriveTime; //Used to pass in drive times when needed
+	//Static stack thingies. I don't know what I'm doing anymore...
+	static stack<double> globalDrive; 	//Used to pass in drive times when needed
+	static stack<double> globalRotate;		//used to pass in rotations when needed; it's yet another awful hack.
 
 private:
 	static Drivebase* drivebase;

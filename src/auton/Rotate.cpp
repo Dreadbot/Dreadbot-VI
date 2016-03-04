@@ -8,6 +8,13 @@ Rotate::Rotate(double relativeDegrees)
 
 void Rotate::enter()
 {
+	if (globalRotate.size() > 0)
+	{
+		autoLog->log("Rotate state OVERRIDING ROTATION of " + to_string(dest) + "s with NEW ROTATION of " + to_string(globalRotate.top()) + "!");
+		dest = globalRotate.top();
+		globalRotate.pop();
+	}
+
 	autoLog->log("Entering state 'Rotate' and rotating from " + std::to_string(getYaw()) + " to " + std::to_string(getYaw() + dest) + " degrees...");
 	startRot = getYaw();
 }

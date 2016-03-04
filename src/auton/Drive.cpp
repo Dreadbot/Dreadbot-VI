@@ -15,11 +15,11 @@ Drive::~Drive()
 
 void Drive::enter()
 {
-	if (globalDriveTime != 0.0)
+	if (globalDrive.size() > 0)
 	{
-		autoLog->log("Drive state OVERRIDING DRIVE TIME of " + to_string(time) + "s with NEW TIME of " + to_string(globalDriveTime) + "s!");
-		time = globalDriveTime;
-		globalDriveTime = 0.0;
+		autoLog->log("Drive state OVERRIDING DRIVE TIME of " + to_string(time) + "s with NEW TIME of " + to_string(globalDrive.top()) + "s!");
+		time = globalDrive.top();
+		globalDrive.pop();
 	}
 
 	startRot = getYaw();

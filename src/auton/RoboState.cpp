@@ -7,7 +7,8 @@ SimplePneumatic* RoboState::arm = nullptr;
 SimplePneumatic* RoboState::extendArm = nullptr;
 AHRS* RoboState::ahrs = nullptr;
 Log* RoboState::autoLog = nullptr;
-double RoboState::globalDriveTime = 0.0;
+stack<double> RoboState::globalDrive;	//@TODO: Exterminate usage of stacks in autonomous...
+stack<double> RoboState::globalRotate;
 
 void RoboState::shoot()
 {
