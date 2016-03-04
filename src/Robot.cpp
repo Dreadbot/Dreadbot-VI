@@ -16,6 +16,7 @@ private:
 	Compressor* compressor;
 	Preferences* prefs;
 	AHRS* ahrs;
+	MultiVision* mv;
 
 	SimplePneumatic* shooterPiston;
 	SimplePneumatic* liftArm;
@@ -52,6 +53,8 @@ private:
 		motors[1]->SetInverted(true);
 		drivebase = new TractionDrive(motors[4], motors[2], motors[3], motors[1]);
 		ahrs = new AHRS(SPI::Port::kMXP);
+		mv = new MultiVision;
+		mv->switchCamera("cam0");
 
 		liftArm = new SimplePneumatic(new DoubleSolenoid(0, 1));
 		shooterPiston = new SimplePneumatic(new Solenoid(3));
@@ -97,6 +100,9 @@ private:
 
 	void TeleopPeriodic()
 	{
+		//Vision during teleop
+		mv->postImage();
+
 		//Primary driver controls
 		mandibles->set(gpd["mandibles"]);
 		if (gpd["mandibles"])
