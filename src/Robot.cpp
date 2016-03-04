@@ -55,7 +55,7 @@ private:
 		fan = new CANTalon(5);
 
 		armElevAlt = true;
-		armPos = 0; //This might result in odd behavior at start
+		armPos = DOWN; //This might result in odd behavior at start
 		fanOn = false;
 	}
 
