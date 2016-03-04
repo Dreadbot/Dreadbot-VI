@@ -1,5 +1,7 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
+#include "auton/AutoBot.h"
+#include <unistd.h>
 using namespace ADBLib;
 
 class Robot: public IterativeRobot
@@ -13,6 +15,8 @@ private:
 	ADBLib::Controller gpd2;
 	Compressor* compressor;
 	Preferences* prefs;
+	AHRS* ahrs;
+	MultiVision mv;
 
 	SimplePneumatic* shooterPiston;
 	SimplePneumatic* liftArm;
@@ -24,6 +28,8 @@ private:
 	bool armElevAlt; //Stores if the alternate control was used last or not. true = alt, false=regular
 	enum {UP, DOWN} armPos;
 	bool fanOn;
+
+	AutoBot* autobot;
 
 	void RobotInit()
 	{
@@ -46,6 +52,7 @@ private:
 		motors[2]->SetInverted(true);
 		motors[1]->SetInverted(true);
 		drivebase = new TractionDrive(motors[4], motors[2], motors[3], motors[1]);
+		ahrs = new AHRS(SPI::Port::kMXP);
 
 		liftArm = new SimplePneumatic(new DoubleSolenoid(0, 1));
 		shooterPiston = new SimplePneumatic(new Solenoid(3));
@@ -54,23 +61,27 @@ private:
 		mandibles = new SimplePneumatic(new Solenoid(4));
 		fan = new CANTalon(5);
 
+		autobot = new AutoBot;
+		autobot->init(drivebase, shooterPiston, liftArm, extendArm, ahrs);
+
 		armElevAlt = true;
 		armPos = DOWN; //This might result in odd behavior at start
 		fanOn = false;
+
+		if (fork() == 0)
+			system("/home/lvuser/grip &");
 	}
 
 	void AutonomousInit()
 	{
+		autobot->switchMode(AutoBot::BREACH);
 		compressor->Start();
 	}
 
 	void AutonomousPeriodic()
 	{
-		if (prefs->GetBoolean("fan-on", true))
-			fan->Set(1);
-		else
-			fan->Set(0);
-		//drivebase->drive(0, -0.6, -(ahrs->GetYaw() / 18.0)); //y and x axis flipped?
+		fan->Set(1);
+		autobot->update();
 	}
 
 	void TeleopInit()
@@ -150,6 +161,7 @@ private:
 
 	void DisabledInit()
 	{
+		Logger::flushLogBuffers();
 		fan->Set(0);
 	}
 
