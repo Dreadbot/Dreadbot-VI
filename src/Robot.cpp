@@ -1,3 +1,4 @@
+//For Mr. Friedman
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
 using namespace ADBLib;
@@ -21,15 +22,15 @@ private:
 	SimplePneumatic* tail;
 	SimplePneumatic* mandibles;
 	CANTalon* fan;
-
+	//Position 4 is not complete!!!!!
 	Timer timer;
 	#define NPOS 5
-	int activeposition = 2 ;
-	double t0[NPOS] = {3.0, 2.5, 2.5, 2.5, 2.5};//get over barrier
-	double x0[NPOS] = {45, 90, 45, -90, -45};//first rotation
-	double t1[NPOS] = {1.2, 1.2, 0.7, 1.2, 1.2};//move to goal
-	double x1[NPOS] = {0, -90, -45, 90, 45};//second rotation
-	double t2[NPOS] = {0.3, 0.2, 0.5, 0.2, 0.2};//drive it home
+	int activeposition = 4  ;
+	double t0[NPOS] = {2.8 , 3.1, 2.5, 2.5, 2.5};//get over barrier
+	double x0[NPOS] = {47, 46, 45, -45, 35};//first rotation
+	double t1[NPOS] = {1.6, 1.1, 0.6, 0.35, 1};//move to goal
+	double x1[NPOS] = {0, 0, -46, 45, -90};//second rotation
+	double t2[NPOS] = {0, 0.0, 0.85, 1, 2};//drive it home
 
 
 	void RobotInit()
@@ -73,6 +74,10 @@ private:
 		//else
 		//fan->Set(0);
 			//Using Gyroscope and dead reckoning to move from #3 to front of tower
+		//Missing steps
+		//1.turn on fan
+		//2.Slightly raise arm to not hit ball off sucker punch
+		//3.State machine so robot stops at the end of code
 		timer.Start();
 		while(timer.Get() <=t0[activeposition])
 		{
@@ -96,7 +101,7 @@ private:
 
 
 		drivebase->drive(0, 0, 0);
-		Wait(10);
+		Wait(10);//create better stop statement
 		//stop
 
 
@@ -168,7 +173,7 @@ void rotate(double degrees, Drivebase* drivebase, AHRS* ahrs)
 		//sets rotation
 
 		SmartDashboard::PutNumber("diff", diff);
-		drivebase->drive(0, 0, -diff / 45.0);
+		drivebase->drive(0, 0, -diff / 60.0);
 	}
 	drivebase->drive(0, 0, 0);
 }
