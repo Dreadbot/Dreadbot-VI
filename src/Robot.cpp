@@ -67,12 +67,17 @@ private:
 		armPos = DOWN; //This might result in odd behavior at start
 		fanOn = false;
 
+		Logger::log("Finished initializing robot; starting GRIP...", "sysLog");
+
 		if (fork() == 0)
 			system("/home/lvuser/grip &");
+
+		Logger::log("Successfully started GRIP!", "sysLog");
 	}
 
 	void AutonomousInit()
 	{
+		Logger::log("Started AUTONOMOUS with mode" + to_string(AutoBot::BREACH) + "!", "sysLog");
 		autobot->switchMode(AutoBot::BREACH);
 		compressor->Start();
 	}
@@ -85,6 +90,7 @@ private:
 
 	void TeleopInit()
 	{
+		Logger::log("Started TELEOP!", "sysLog");
 		compressor->Start();
 		jys->SetRumble(Joystick::kLeftRumble, 1024);
 	}
@@ -160,13 +166,16 @@ private:
 
 	void DisabledInit()
 	{
+		Logger::log("DISABLING robot!", "sysLog");
 		Logger::flushLogBuffers();
+		compressor->Stop();
 		fan->Set(0);
 	}
 
 	void TestInit()
 	{
-
+		Logger::log("Started TEST!", "sysLog");
+		compressor->Start();
 	}
 
 	void TestPeriodic()

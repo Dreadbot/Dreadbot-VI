@@ -5,7 +5,7 @@ AutoBot::AutoBot()
 {
 	log = Logger::getLog("sysLog");
 
-	drive_breach = new Drive(3.0, 0.5);
+	drive_breach = new Drive(2.0, 1.0);
 	guidedDrive = new GuidedDrive(0.5, 20); //20 second time because guided driving should end with a collision
 	rotate = new Rotate(90.0);
 	stopped = new Stopped;
