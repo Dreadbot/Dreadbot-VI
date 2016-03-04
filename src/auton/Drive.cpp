@@ -36,7 +36,7 @@ int Drive::update()
 		return TIMER_EXPIRED;
 	if (isColliding())
 	{
-		autoLog->log("GuidedDrive state detected collision!");
+		autoLog->log("Drive state detected collision!");
 		return COLLISION;
 	}
 
