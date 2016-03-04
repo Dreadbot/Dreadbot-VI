@@ -1,6 +1,7 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
 #include "auton/AutoBot.h"
+#include "DreadbotDIO.h"
 #include <unistd.h>
 using namespace ADBLib;
 
@@ -81,7 +82,7 @@ private:
 	void AutonomousInit()
 	{
 		Logger::log("Started AUTONOMOUS with mode" + to_string(AutoBot::BREACH) + "!", "sysLog");
-		autobot->switchMode(AutoBot::BREACH);
+		autobot->switchMode(getAutonMode());
 		compressor->Start();
 	}
 
