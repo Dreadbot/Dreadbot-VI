@@ -11,7 +11,7 @@ void GuidedDrive::enter()
 
 	startRot = getYaw();
 	autoLog->log("Entering state 'GuidedDrive' for " + to_string(time) + " seconds and rotation of " + to_string(getYaw()) + " degrees!");
-	armUp();
+	armDown(); //The arm starts high
 	Wait(ARMUP_PULSETIME);
 	armStop();
 	driveTimer->Start();
@@ -46,7 +46,7 @@ int GuidedDrive::update()
 			armStop();
 	}
 	//The camera is INVERTED!
-	drive(speed, -diff * ROTATE_SCALAR);
+	drive(/*speed*/0.0, -diff * ROTATE_SCALAR);
 
 	if (driveTimer->Get() >= time)
 		return TIMER_EXPIRED;
