@@ -7,9 +7,9 @@ void Shoot::enter()
 int Shoot::update()
 {
 	armUp();
-	Wait(0.5);
+	Wait(ARMUP_TIME);
 	armOut();
-	Wait(0.49);
+	Wait(ARMOUT_SHOOTERDELAY);
 	shoot();
 	return TIMER_EXPIRED;
 }

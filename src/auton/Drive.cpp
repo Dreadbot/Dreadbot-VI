@@ -30,7 +30,7 @@ void Drive::enter()
 int Drive::update()
 {
 	double diff = getYaw() - startRot;
-	drive(speed, -diff / 18.0);
+	drive(speed, -diff * DRIVE_SCALAR);
 
 	if (driveTimer->Get() >= time)
 		return TIMER_EXPIRED;

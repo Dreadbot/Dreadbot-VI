@@ -32,9 +32,8 @@ int Rotate::update()
 	if (diff < -180.0)
 		diff = 360 + diff;
 
-	drive(0, -diff / 90.0);
+	drive(0, -diff * ROTATE_SCALAR);
 
-	SmartDashboard::PutNumber("diff", diff);
 	if (fabs(diff) <= 3.0)
 		return TIMER_EXPIRED;
 	return NO_UPDATE;

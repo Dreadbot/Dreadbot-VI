@@ -12,14 +12,24 @@ using std::stack;
 #define DRIVE_KD 0.003
 
 //NavX MXP collision constants
-#define COLLISION_THRESHOLD_DELTAG 0.5 	//Taken from NavX library demo code, see note for isColliding()
-#define COLLISION_TIMEOUT 0.06 			//60ms timeout to ensure valid collision detection. May be too generous.
+#define COLLISION_THRESHOLD_DELTAG 	0.5 	//Taken from NavX library demo code, see note for isColliding()
+#define COLLISION_TIMEOUT 			0.06 	//60ms timeout to ensure valid collision detection. May be too generous.
 
 //Vision -- LifeCam 3000 USB camera values
-#define CAM_FOV 57.0		//Manually measured
-#define CAM_XSIZE 1280.0	//Obtained from image data
-#define CAM_YSIZE 720.0		//Obtained from image data
+#define CAM_FOV 	57.0					//Manually measured
+#define CAM_XSIZE 	1280.0					//Obtained from image data
+#define CAM_YSIZE 	720.0					//Obtained from image data
 #define CAM_ANGRESO (CAM_FOV / CAM_XSIZE)	//Calculated constant
+
+//Autonomous constants
+#define BREACH_TIME			2.35			//Time taken to breach any given rampart
+#define BREACH_SPEED		0.75			//Speed (-1-1) of driving while breaching.
+#define SHOOT_TIME			0.3				//How long the shooter piston should be extending/extended in order to shoot
+#define ARMUP_PULSETIME 	0.25 			//Time to pulse the arm to raise cameras above the bumpers.
+#define ROTATE_SCALAR		(1.0 / 90.0)	//Value to multiply error by to rotate at the right speed
+#define DRIVE_SCALAR		(1.0 / 18.0)	//Value to multiply error by to drive straight
+#define ARMUP_TIME			0.5				//Time to raise the arm from lowest to highest position
+#define ARMOUT_SHOOTERDELAY	0.49			//Time delay until the shooter piston should eject the ball after the arm starts extending
 
 class RoboState : public FSMState
 {
