@@ -39,13 +39,14 @@ int GuidedDrive::update()
 		//Use vision to keep the center of the target between the 1/4 and 3/4 marks
 		double bestY = grip->GetNumberArray("targetsCam0/centerY", llvm::ArrayRef<double>())[bestTarget];
 		if (bestY > (3 * CAM_YSIZE / 4.0))
-			armUp();
-		else if (bestY < CAM_YSIZE / 4.0)
 			armDown();
+		else if (bestY < CAM_YSIZE / 4.0)
+			armUp();
 		else
 			armStop();
 	}
-	drive(speed, diff * ROTATE_SCALAR);
+	//The camera is INVERTED!
+	drive(speed, -diff * ROTATE_SCALAR);
 
 	if (driveTimer->Get() >= time)
 		return TIMER_EXPIRED;
