@@ -28,7 +28,6 @@ private:
 
 	bool armElevAlt; //Stores if the alternate control was used last or not. true = alt, false=regular
 	enum {UP, DOWN} armPos;
-	bool fanOn;
 
 	AutoBot* autobot;
 
@@ -72,7 +71,6 @@ private:
 
 		armElevAlt = true;
 		armPos = DOWN; //This might result in odd behavior at start
-		fanOn = false;
 
 		Logger::log("Finished initializing robot; starting GRIP...", "sysLog");
 
@@ -85,13 +83,13 @@ private:
 	void AutonomousInit()
 	{
 		Logger::log("Started AUTONOMOUS with mode" + to_string(AutoBot::BREACH) + "!", "sysLog");
+		fan->Set(1);
 		autobot->switchMode(getAutonMode());
 		compressor->Start();
 	}
 
 	void AutonomousPeriodic()
 	{
-		fan->Set(1);
 		autobot->update();
 	}
 
@@ -99,6 +97,7 @@ private:
 	{
 		Logger::log("Started TELEOP!", "sysLog");
 		compressor->Start();
+		fan->Set(1);
 		jys->SetRumble(Joystick::kLeftRumble, 1024);
 	}
 
@@ -109,8 +108,6 @@ private:
 
 		//Primary driver controls
 		mandibles->set(gpd["mandibles"]);
-		if (gpd["mandibles"])
-			fanOn = true;
 
 		if (gpd["armUp"] || gpd["armDown"])
 		{
@@ -160,18 +157,11 @@ private:
 				Wait(0.3);
 				shooterPiston->set(0);
 			}
-			fanOn = false;
 		}
 		drivebase->drive(0, -gpd["transY"], gpd["rot"]);
 
 		extendArm->set(gpd2["extendArm"]);
 		tail->set(gpd2["tail"]);
-
-		//Fan control, uses the *cough* force *cough* fan macro
-		if (!gpd2["fanOverride"])
-			fan->Set(fanOn);
-		else
-			fan->Set(1);
 	}
 
 	void DisabledInit()
