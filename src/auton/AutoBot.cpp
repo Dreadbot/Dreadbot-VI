@@ -50,10 +50,10 @@ void AutoBot::switchMode(autonModes mode)
 	else if (mode == GUIDED)
 	{
 		log->log("Applying state table 'GUIDED'!");
-		defState = drive_breach;
-		transitionTable[i++] = {drive_breach, RoboState::TIMER_EXPIRED, guidedDrive};
-		transitionTable[i++] = {guidedDrive, RoboState::COLLISION, stopped/*shoot*/};
-	//	transitionTable[i++] = {shoot, RoboState::TIMER_EXPIRED, stopped};
+		defState = guidedDrive;
+		//transitionTable[i++] = {drive_breach, RoboState::TIMER_EXPIRED, guidedDrive};
+		transitionTable[i++] = {guidedDrive, RoboState::COLLISION, /*stopped*/shoot};
+		transitionTable[i++] = {shoot, RoboState::TIMER_EXPIRED, stopped};
 		transitionTable[i++] = END_STATE_TABLE;
 	}
 	else //if (mode == NOP || mode == FULL)
