@@ -23,13 +23,13 @@ AutoBot::autonModes getAutonMode(void)
 	delete bit1;
 	delete bit2;
 
-	if      (sw == 0)  mode = AutoBot::NOP;
-	else if (sw == 1)  mode = AutoBot::BREACH;
-	else if (sw == 2)  mode = AutoBot::GUIDED;
-	else if (sw == 3)  mode = AutoBot::FULL;
-	else if (sw == 4)  mode = AutoBot::NOP;
-	else if (sw == 5)  mode = AutoBot::NOP;
-	else if (sw == 6)  mode = AutoBot::NOP;
+	if      (sw == 0)	mode = AutoBot::NOP;
+	else if (sw == 1)	mode = AutoBot::BREACH;
+	else if (sw == 2)	mode = AutoBot::DUMB;
+	else if (sw == 3)	mode = AutoBot::GUIDED;
+	else if (sw == 4)	mode = AutoBot::FULL;
+	else if (sw == 5)	mode = AutoBot::NOP;
+	else if (sw == 6)	mode = AutoBot::NOP;
 
 	return mode;
 }

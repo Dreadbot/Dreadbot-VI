@@ -16,7 +16,7 @@ using ADBLib::SimplePneumatic;
 class AutoBot
 {
 public:
-	enum autonModes {NOP, BREACH, GUIDED, FULL};
+	enum autonModes {NOP, BREACH, DUMB, GUIDED, FULL};
 
 	AutoBot();
 	~AutoBot();
@@ -33,8 +33,9 @@ private:
 
 	//States
 	Drive* drive_breach;
+	Drive* drive_forever;
 	GuidedDrive* guidedDrive;
-	Rotate* rotate;
+	Rotate* rotate_lowbar;
 	Stopped* stopped;
 	Shoot* shoot;
 };

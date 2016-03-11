@@ -33,8 +33,8 @@ private:
 
 	void RobotInit()
 	{
-		//Just in case the above doesn't work, what's below is an awful hack.
-		//system("if [ -f \"/sysLog.txt\" ] ; then i=0; while [ -f \"/robologs/sysLog.$i.txt\" ] ; do ((i++)) ; done ; mv \"/sysLog.txt\" \"/robologs/sysLog.$i.txt\" ; fi ;");
+		//Awful hack in need of replacement
+		system("if [ -f \"/sysLog.txt\" ] ; then i=0; while [ -f \"/robologs/sysLog.$i.txt\" ] ; do ((i++)) ; done ; mv \"/sysLog.txt\" \"/robologs/sysLog.$i.txt\" ; fi ;");
 
 		prefs = Preferences::GetInstance();
 		compressor = new Compressor(1);

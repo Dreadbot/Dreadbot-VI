@@ -22,8 +22,9 @@ using std::stack;
 #define CAM_ANGRESO (CAM_FOV / CAM_XSIZE)	//Calculated constant
 
 //Autonomous constants
-#define BREACH_TIME			2.35			//Time taken to breach any given rampart
+#define BREACH_TIME			2.45			//Time taken to breach any given rampart
 #define BREACH_SPEED		0.75			//Speed (-1-1) of driving while breaching.
+#define LOWBAR_ANGLE		45.0			//Angle to rotate by after passing through the low bar
 #define SHOOT_TIME			0.3				//How long the shooter piston should be extending/extended in order to shoot
 #define ARMUP_PULSETIME 	0.25 			//Time to pulse the arm to raise cameras above the bumpers.
 #define ROTATE_SCALAR		(1.0 / 90.0)	//Value to multiply error by to rotate at the right speed

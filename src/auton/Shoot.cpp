@@ -6,10 +6,10 @@ void Shoot::enter()
 }
 int Shoot::update()
 {
-	armUp();
+	armDown();
 	Wait(ARMUP_TIME);
-	armOut();
-	Wait(ARMOUT_SHOOTERDELAY);
+	//armOut();					//Commented out in the name of the Holy Low Bar
+	//Wait(ARMOUT_SHOOTERDELAY);
 	shoot();
 	return TIMER_EXPIRED;
 }

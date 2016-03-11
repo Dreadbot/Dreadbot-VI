@@ -6,8 +6,9 @@ AutoBot::AutoBot()
 	log = Logger::getLog("sysLog");
 
 	drive_breach = new Drive(BREACH_TIME, BREACH_SPEED);
+	drive_forever = new Drive(20.0, BREACH_SPEED);
 	guidedDrive = new GuidedDrive(20, BREACH_SPEED); //20 second time because guided driving should end with a collision
-	rotate = new Rotate(90.0);
+	rotate_lowbar = new Rotate(LOWBAR_ANGLE);
 	stopped = new Stopped;
 	shoot = new Shoot();
 }
@@ -16,8 +17,9 @@ AutoBot::AutoBot()
 AutoBot::~AutoBot()
 {
 	delete drive_breach;
+	delete drive_forever;
 	delete guidedDrive;
-	delete rotate;
+	delete rotate_lowbar;
 	delete shoot;
 	delete stopped;
 }
@@ -45,6 +47,16 @@ void AutoBot::switchMode(autonModes mode)
 		log->log("Applying state table 'BREACH'!");
 		defState = drive_breach;
 		transitionTable[i++] = {drive_breach, RoboState::TIMER_EXPIRED, stopped};
+		transitionTable[i++] = END_STATE_TABLE;
+	}
+	else if (mode == DUMB)
+	{
+		log->log("Applying state table 'DUMB'");
+		defState = drive_breach;
+		transitionTable[i++] = {drive_breach, RoboState::TIMER_EXPIRED, rotate_lowbar};
+		transitionTable[i++] = {rotate_lowbar, RoboState::TIMER_EXPIRED, drive_forever};
+		transitionTable[i++] = {drive_breach, RoboState::COLLISION, shoot};
+		transitionTable[i++] = {shoot, RoboState::TIMER_EXPIRED, stopped};
 		transitionTable[i++] = END_STATE_TABLE;
 	}
 	else if (mode == GUIDED)
