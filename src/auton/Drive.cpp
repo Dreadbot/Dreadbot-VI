@@ -34,7 +34,7 @@ int Drive::update()
 
 	if (driveTimer->Get() >= time)
 		return TIMER_EXPIRED;
-	if (isColliding())
+	if (isColliding() && driveTimer->Get() > COLLISION_DELAY)
 	{
 		autoLog->log("Drive state detected collision!");
 		return COLLISION;

@@ -73,13 +73,12 @@ double RoboState::getYawRate()
  * https://github.com/kauailabs/navxmxp/blob/master/roborio/c%2B%2B/navXMXP_CPP_CollisionDetection/src/Robot.cpp
  * THIS FUNCTION IS BEST USED IF CALLED REGULARLY OVER SHORT TIME INCREMENTS!
  */
-
 bool RoboState::isColliding()
 {
 	if (ahrs == nullptr)
 		return false;
 
-	static double lXAccel = 0.0, lYAccel = 0.0; //Only initialized once
+	static double lXAccel = 0.0, lYAccel = 0.0, lZAccel; //Only initialized once
 	static Timer timer;
 	static bool timerRunning = false;
 	if (!timerRunning) //WPI timers don't have a way of telling you if they're already running
@@ -95,14 +94,15 @@ bool RoboState::isColliding()
 		timer.Start();
 		lXAccel = ahrs->GetWorldLinearAccelX();
 		lYAccel = ahrs->GetWorldLinearAccelY();
+		lZAccel = ahrs->GetWorldLinearAccelZ();
 		return false; //Since the timeout has been exceeded, return NO COLLISION.
 	}
 
-	double xAccel = ahrs->GetWorldLinearAccelX(), yAccel = ahrs->GetWorldLinearAccelY();
-	double jerkX = xAccel - lXAccel, jerkY = yAccel - lYAccel;
+	double xAccel = ahrs->GetWorldLinearAccelX(), yAccel = ahrs->GetWorldLinearAccelY(), zAccel = ahrs->GetWorldLinearAccelZ();
+	double jerkX = xAccel - lXAccel, jerkY = yAccel - lYAccel, jerkZ = zAccel - lZAccel;
 	lXAccel = xAccel;
 	lYAccel = yAccel;
-	if (sqrt((jerkX * jerkX) + (jerkY * jerkY)) > COLLISION_THRESHOLD_DELTAG)
+	if (sqrt((jerkX * jerkX) + (jerkY * jerkY) + (jerkZ * jerkZ)) > COLLISION_THRESHOLD_DELTAG)
 		return true;
 	return false;
 }

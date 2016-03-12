@@ -74,8 +74,8 @@ private:
 
 		Logger::log("Finished initializing robot; starting GRIP...", "sysLog");
 
-		if (fork() == 0)
-			system("/home/lvuser/grip &");
+		//if (fork() == 0)
+		//	system("/home/lvuser/grip &");
 
 		Logger::log("Successfully started GRIP!", "sysLog");
 	}

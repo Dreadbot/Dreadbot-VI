@@ -5,10 +5,10 @@ AutoBot::AutoBot()
 {
 	log = Logger::getLog("sysLog");
 
-	drive_breach = new Drive(BREACH_TIME, BREACH_SPEED);
+	drive_breach = new Drive(Preferences::GetInstance()->GetDouble("BREACH_TIME", BREACH_TIME), BREACH_SPEED);
 	drive_forever = new Drive(20.0, BREACH_SPEED);
 	guidedDrive = new GuidedDrive(20, BREACH_SPEED); //20 second time because guided driving should end with a collision
-	rotate_lowbar = new Rotate(LOWBAR_ANGLE);
+	rotate_lowbar = new Rotate(Preferences::GetInstance()->GetDouble("LOWBAR_ANGLE", LOWBAR_ANGLE));
 	stopped = new Stopped;
 	shoot = new Shoot();
 }
@@ -55,7 +55,7 @@ void AutoBot::switchMode(autonModes mode)
 		defState = drive_breach;
 		transitionTable[i++] = {drive_breach, RoboState::TIMER_EXPIRED, rotate_lowbar};
 		transitionTable[i++] = {rotate_lowbar, RoboState::TIMER_EXPIRED, drive_forever};
-		transitionTable[i++] = {drive_breach, RoboState::COLLISION, shoot};
+		transitionTable[i++] = {drive_forever, RoboState::COLLISION, shoot};
 		transitionTable[i++] = {shoot, RoboState::TIMER_EXPIRED, stopped};
 		transitionTable[i++] = END_STATE_TABLE;
 	}
