@@ -3,7 +3,7 @@
 //Initializes states
 AutoBot::AutoBot()
 {
-	log = Logger::getLog("sysLog");
+	log = Logger::getLog("robolog");
 
 	drive_breach = new Drive(Preferences::GetInstance()->GetDouble("BREACH_TIME", BREACH_TIME), BREACH_SPEED);
 	drive_forever = new Drive(20.0, BREACH_SPEED);
@@ -33,7 +33,7 @@ void AutoBot::init(Drivebase* newDB, SimplePneumatic* newShooterPiston,
 	RoboState::arm = newArm;
 	RoboState::extendArm = newExtendArm;
 	RoboState::ahrs = ahrs;
-	RoboState::autoLog = Logger::getLog("sysLog");
+	RoboState::autoLog = Logger::getLog("robolog");
 }
 
 //Switches modes, changing the state table in the process.

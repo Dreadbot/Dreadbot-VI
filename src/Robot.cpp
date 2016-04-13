@@ -40,7 +40,7 @@ private:
 
 	void RobotInit()
 	{
-		//Takes the existing sysLog.txt file in / and moves it to /logfiles/
+		//Takes the existing robolog.txt file in / and moves it to /logfiles/
 		//Also increments the log file name by a number so old logs are preserved.
 		moveLog();
 
@@ -80,17 +80,17 @@ private:
 		armElevAlt = true;
 		armPos = DOWN; //This might result in odd behavior at start
 
-		Logger::log("Finished initializing robot; starting GRIP...", "sysLog");
+		Logger::log("Finished initializing robot; starting GRIP...", "robolog");
 
 		//if (fork() == 0)
 		//	system("/home/lvuser/grip &");
 
-		Logger::log("Successfully started GRIP!", "sysLog");
+		Logger::log("Successfully started GRIP!", "robolog");
 	}
 
 	void AutonomousInit()
 	{
-		Logger::log("Started AUTONOMOUS with mode" + to_string(AutoBot::BREACH) + "!", "sysLog");
+		Logger::log("Started AUTONOMOUS with mode" + to_string(AutoBot::BREACH) + "!", "robolog");
 		fan->Set(1);
 		autobot->switchMode(getAutonMode());
 		compressor->Start();
@@ -103,7 +103,7 @@ private:
 
 	void TeleopInit()
 	{
-		Logger::log("Started TELEOP!", "sysLog");
+		Logger::log("Started TELEOP!", "robolog");
 		compressor->Start();
 		fan->Set(1);
 		jys->SetRumble(Joystick::kLeftRumble, 1024);
@@ -174,7 +174,7 @@ private:
 
 	void DisabledInit()
 	{
-		Logger::log("DISABLING robot!", "sysLog");
+		Logger::log("DISABLING robot!", "robolog");
 		Logger::flushLogBuffers();
 		compressor->Stop();
 		fan->Set(0);
@@ -182,7 +182,7 @@ private:
 
 	void TestInit()
 	{
-		Logger::log("Started TEST!", "sysLog");
+		Logger::log("Started TEST!", "robolog");
 		compressor->Start();
 	}
 
@@ -199,8 +199,8 @@ void moveLog()
 	//but everything filesystem-y is from him. Thank you!
 
 	const string logdir = "/";
-	const string savedir = "/logfiles/";
-	const string prefix = "sysLog";
+	const string savedir = "/robologs/";
+	const string prefix = "robolog";
 	const string f_extens = ".txt";
 
 	// Will just give harmless error if directory already exists.
@@ -211,7 +211,7 @@ void moveLog()
 	if (!dp)
 		return;
 
-	// Find the highest existing saved sysLog
+	// Find the highest existing saved robolog
 	int max = 0;
 	std::regex reg("\\d+");
 	dirent* ent = readdir(dp);
