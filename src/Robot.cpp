@@ -3,7 +3,14 @@
 #include "auton/AutoBot.h"
 #include "DreadbotDIO.h"
 #include <unistd.h>
+#include <dirent.h>
+#include <regex>
+#include <sys/stat.h>
+#include <string>
 using namespace ADBLib;
+using std::string;
+
+void moveLog();
 
 class Robot: public IterativeRobot
 {
@@ -33,8 +40,9 @@ private:
 
 	void RobotInit()
 	{
-		//Awful hack in need of replacement
-		system("if [ -f \"/sysLog.txt\" ] ; then i=0; while [ -f \"/robologs/sysLog.$i.txt\" ] ; do ((i++)) ; done ; mv \"/sysLog.txt\" \"/robologs/sysLog.$i.txt\" ; fi ;");
+		//Takes the existing sysLog.txt file in / and moves it to /logfiles/
+		//Also increments the log file name by a number so old logs are preserved.
+		moveLog();
 
 		prefs = Preferences::GetInstance();
 		compressor = new Compressor(1);
@@ -183,5 +191,44 @@ private:
 
 	}
 };
+
+void moveLog()
+{
+	//Credit to Mr. King for most of this function. It's been tweaked a lot to
+	//CPP-ify it (for the sake of making it easier to explain to new programmers)
+	//but everything filesystem-y is from him. Thank you!
+
+	const string logdir = "/";
+	const string savedir = "/logfiles/";
+	const string prefix = "sysLog";
+	const string f_extens = ".txt";
+
+	// Will just give harmless error if directory already exists.
+	// If there's a real error we'll catch it when the opendir() call
+	// below fails. (returns NULL in case of failure)
+	mkdir(savedir.c_str(), 0777);
+	DIR* dp = opendir(savedir.c_str());
+	if (!dp)
+		return;
+
+	// Find the highest existing saved sysLog
+	int max = 0;
+	std::regex reg("\\d+");
+	dirent* ent = readdir(dp);
+	while (ent)
+	{
+		std::smatch matches;
+		if (std::regex_search(string(ent->d_name), matches, reg))
+		{
+			int n = stoi(matches.str(0));
+			if (n > max)
+				max = n;
+		}
+
+		ent = readdir(dp);
+	}
+	string dst = savedir + prefix + "_" + std::to_string(max + 1) + f_extens;
+	rename((logdir + prefix + f_extens).c_str(), dst.c_str());
+}
 
 START_ROBOT_CLASS(Robot);
