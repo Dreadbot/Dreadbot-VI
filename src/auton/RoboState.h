@@ -12,7 +12,7 @@ using std::stack;
 #define DRIVE_KD 0.003
 
 //NavX MXP collision constants
-#define COLLISION_THRESHOLD_DELTAG 	0.5 	//Acceleration must exceed this limit for a collision to be registered
+#define COLLISION_THRESHOLD_DELTAG 	0.6 	//Acceleration must exceed this limit for a collision to be registered
 #define COLLISION_TIMEOUT 			0.06 	//60ms timeout to ensure valid collision detection. May be too generous.
 #define COLLISION_DELAY				0.5		//Time to wait until collisions are registered. Used in drive/guideddrive states
 
@@ -25,7 +25,7 @@ using std::stack;
 //Autonomous constants
 #define BREACH_TIME			2.35			//Time taken to breach any given rampart
 #define BREACH_SPEED		0.75			//Speed (-1-1) of driving while breaching.
-#define LOWBAR_ANGLE		60.0			//Angle to rotate by after passing through the low bar
+#define LOWBAR_ANGLE		66.0			//Angle to rotate by after passing through the low bar
 #define SHOOT_TIME			0.3				//How long the shooter piston should be extending/extended in order to shoot
 #define ARMUP_PULSETIME 	0.25 			//Time to pulse the arm to raise cameras above the bumpers.
 #define ROTATE_SCALAR		(1.0 / 90.0)	//Value to multiply error by to rotate at the right speed

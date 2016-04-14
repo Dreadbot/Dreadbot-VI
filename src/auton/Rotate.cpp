@@ -17,6 +17,9 @@ void Rotate::enter()
 
 	autoLog->log("Entering state 'Rotate' and rotating from " + std::to_string(getYaw()) + " to " + std::to_string(getYaw() + dest) + " degrees...");
 	startRot = getYaw();
+	armUp();
+	Wait(0.40); //eh....
+	armStop();
 }
 
 int Rotate::update()

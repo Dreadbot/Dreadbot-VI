@@ -5,7 +5,7 @@ AutoBot::AutoBot()
 {
 	log = Logger::getLog("robolog");
 
-	drive_breach = new Drive(Preferences::GetInstance()->GetDouble("BREACH_TIME", BREACH_TIME), BREACH_SPEED);
+	drive_breach = new Drive(Preferences::GetInstance()->GetDouble("BREACH_TIME", BREACH_TIME * 0.6), BREACH_SPEED);
 	drive_forever = new Drive(20.0, BREACH_SPEED);
 	guidedDrive = new GuidedDrive(20, BREACH_SPEED); //20 second time because guided driving should end with a collision
 	rotate_lowbar = new Rotate(Preferences::GetInstance()->GetDouble("LOWBAR_ANGLE", LOWBAR_ANGLE));
