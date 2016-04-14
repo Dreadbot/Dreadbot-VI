@@ -1,7 +1,6 @@
 #include "WPILib.h"
 #include "../ADBLib/src/ADBLib.h"
 #include "auton/AutoBot.h"
-#include "DreadbotDIO.h"
 #include <unistd.h>
 #include <dirent.h>
 #include <regex>
@@ -94,7 +93,7 @@ private:
 	{
 		robolog->log("Started AUTONOMOUS with mode" + to_string(AutoBot::BREACH) + "!");
 		fan->Set(1);
-		autobot->switchMode(getAutonMode());
+		autobot->switchMode((AutoBot::autonModes)Preferences::GetInstance()->GetInt("AutonMode", 1));
 		compressor->Start();
 	}
 
