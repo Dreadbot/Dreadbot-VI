@@ -44,6 +44,7 @@ private:
 		//Takes the existing robolog.txt file in / and moves it to /logfiles/
 		//Also increments the log file name by a number so old logs are preserved.
 		moveLog();
+		Logger::newLog("robolog", "/robolog.txt");
 		robolog = Logger::getLog("robolog");
 
 		prefs = Preferences::GetInstance();
