@@ -25,6 +25,7 @@ private:
 	Preferences* prefs;
 	AHRS* ahrs;
 	MultiVision* mv;
+	Log* robolog;
 
 	SimplePneumatic* shooterPiston;
 	SimplePneumatic* liftArm;
@@ -43,6 +44,7 @@ private:
 		//Takes the existing robolog.txt file in / and moves it to /logfiles/
 		//Also increments the log file name by a number so old logs are preserved.
 		moveLog();
+		robolog = Logger::getLog("robolog");
 
 		prefs = Preferences::GetInstance();
 		compressor = new Compressor(1);
@@ -80,17 +82,16 @@ private:
 		armElevAlt = true;
 		armPos = DOWN; //This might result in odd behavior at start
 
-		Logger::log("Finished initializing robot; starting GRIP...", "robolog");
+		robolog->log("Finished initializing robot");// starting GRIP...");
 
 		//if (fork() == 0)
 		//	system("/home/lvuser/grip &");
-
-		Logger::log("Successfully started GRIP!", "robolog");
+		//robolog->log("Successfully started GRIP!");
 	}
 
 	void AutonomousInit()
 	{
-		Logger::log("Started AUTONOMOUS with mode" + to_string(AutoBot::BREACH) + "!", "robolog");
+		robolog->log("Started AUTONOMOUS with mode" + to_string(AutoBot::BREACH) + "!");
 		fan->Set(1);
 		autobot->switchMode(getAutonMode());
 		compressor->Start();
@@ -103,7 +104,7 @@ private:
 
 	void TeleopInit()
 	{
-		Logger::log("Started TELEOP!", "robolog");
+		robolog->log("Started TELEOP!");
 		compressor->Start();
 		fan->Set(1);
 		jys->SetRumble(Joystick::kLeftRumble, 1024);
@@ -174,7 +175,7 @@ private:
 
 	void DisabledInit()
 	{
-		Logger::log("DISABLING robot!", "robolog");
+		robolog->log("DISABLING robot!");
 		Logger::flushLogBuffers();
 		compressor->Stop();
 		fan->Set(0);
@@ -182,13 +183,89 @@ private:
 
 	void TestInit()
 	{
-		Logger::log("Started TEST!", "robolog");
-		compressor->Start();
+		//Runs through a test sequence, the results of which are logged
+		Logger::log("Started test sequence!", "robolog");
+
+		testComponent("COMPRESSOR", [&](){compressor->Start();});	//Uses a lambda function to pass in
+																	//the test sequence.
+		testComponent("DRIVEBASE", [&](){
+			drivebase->drive(0, 1, 0);
+			Wait(1);
+			drivebase->drive(0, -1, 0);
+			Wait(1);
+			drivebase->drive(0, 0, 1);
+			Wait(1);
+			drivebase->drive(0, 0, -1);
+			Wait(1);
+			drivebase->drive(0, 0, 0);
+		});
+
+		testComponent("SHOOTER PISTON", [&](){
+			shooterPiston->set(1);
+			Wait(1);
+			shooterPiston->set(0);
+		});
+
+		testComponent("LIFT ARM", [&](){
+			liftArm->set(1);
+			Wait(1.5); //Leaves the lift arm up because arm extension needs it up.
+		});
+
+		testComponent("ARM EXTENSION", [&](){
+			extendArm->set(1);
+			Wait(1.5);
+			extendArm->set(0);
+			Wait(1.5);
+			liftArm->set(-1);
+			Wait(1.5); //Lowers the lift arm as left up during the previous test.
+		});
+
+		testComponent("TAIL", [&](){
+			tail->set(1);
+			Wait(1);
+			tail->set(0);
+		});
+
+		testComponent("MANDIBLES", [&](){
+			mandibles->set(1);
+			Wait(1);
+			mandibles->set(0);
+		});
+
+		testComponent("FAN", [&](){
+			fan->Set(1);
+			Wait(1);
+			fan->Set(0);
+		});
 	}
 
 	void TestPeriodic()
 	{
 
+	}
+
+	inline bool getTestResponse()
+	{
+		//Gets a y/n (t/f) response on component functionality
+		//Controls not in ControlConfig.xml because they are
+		//DIAGNOSTIC controls, not robot controls
+		while (true)
+		{
+			if (jys->GetRawButton(3)) //Button X
+				return true;
+			if (jys->GetRawButton(2)) //Button B
+				return false;
+		}
+	}
+
+	void testComponent(string compName, std::function<void(void)> testFunc)
+	{
+		robolog->log("Testing " + compName + "...");
+		testFunc();
+		if (getTestResponse())
+			robolog->log(compName + " is FUNCTIONAL");
+		else
+			robolog->log(compName + " is NOT FUNCTIONAL");
 	}
 };
 
