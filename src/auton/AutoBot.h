@@ -34,6 +34,7 @@ private:
 	//States
 	Drive* drive_breach;
 	Drive* drive_forever;
+	Drive* drive_lowbar;
 	GuidedDrive* guidedDrive;
 	Rotate* rotate_lowbar;
 	Stopped* stopped;

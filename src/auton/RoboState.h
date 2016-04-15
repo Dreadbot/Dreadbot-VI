@@ -23,7 +23,8 @@ using std::stack;
 #define CAM_ANGRESO (CAM_FOV / CAM_XSIZE)	//Calculated constant
 
 //Autonomous constants
-#define BREACH_TIME			2.35			//Time taken to breach any given rampart
+#define BREACH_TIME			2.35			//Time taken to breach terrain defenses
+#define LOWBAR_TIME			1.41			//TIme taken to breach the lowbar.
 #define BREACH_SPEED		0.75			//Speed (-1-1) of driving while breaching.
 #define LOWBAR_ANGLE		66.0			//Angle to rotate by after passing through the low bar
 #define SHOOT_TIME			0.3				//How long the shooter piston should be extending/extended in order to shoot
