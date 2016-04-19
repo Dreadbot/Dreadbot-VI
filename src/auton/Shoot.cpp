@@ -6,12 +6,20 @@ void Shoot::enter()
 }
 int Shoot::update()
 {
-	armDown();
-	Wait(ARMUP_TIME);
-	//armOut();					//Commented out in the name of the Holy Low Bar
-	//Wait(ARMOUT_SHOOTERDELAY);
+	if (PREFS_HIGH_SHOT)
+	{
+		armUp();
+		Wait(ARMUP_TIME);
+		armOut();
+		Wait(0.49); //Copied from Robot.cpp, it's the "shooter macro"
+	}
+	else
+	{
+		armDown();
+		Wait(ARMUP_TIME);
+	}
 	shoot();
-	return TIMER_EXPIRED;
+	return TIMER_EXPIRED; //durrrrr
 }
 void Shoot::exit()
 {

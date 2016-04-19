@@ -2,7 +2,6 @@
 #include "../../ADBLib/src/ADBLib.h"
 #include "RoboState.h"
 #include "Drive.h"
-#include "GuidedDrive.h"
 #include "Rotate.h"
 #include "Shoot.h"
 #include "Stopped.h"
@@ -33,9 +32,8 @@ private:
 
 	//States
 	Drive* drive_breach;
-	Drive* drive_forever;
+	Drive* drive_goal;
 	Drive* drive_lowbar;
-	GuidedDrive* guidedDrive;
 	Rotate* rotate_lowbar;
 	Stopped* stopped;
 	Shoot* shoot;

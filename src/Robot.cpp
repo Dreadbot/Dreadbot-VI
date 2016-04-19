@@ -82,11 +82,7 @@ private:
 		armElevAlt = true;
 		armPos = DOWN; //This might result in odd behavior at start
 
-		robolog->log("Finished initializing robot");// starting GRIP...");
-
-		//if (fork() == 0)
-		//	system("/home/lvuser/grip &");
-		//robolog->log("Successfully started GRIP!");
+		robolog->log("Finished initializing robot");
 	}
 
 	void AutonomousInit()
