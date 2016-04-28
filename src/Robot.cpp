@@ -103,7 +103,6 @@ private:
 		robolog->log("Started TELEOP!");
 		compressor->Start();
 		fan->Set(1);
-		jys->SetRumble(Joystick::kLeftRumble, 1024);
 	}
 
 	void TeleopPeriodic()
